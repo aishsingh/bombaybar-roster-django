@@ -1,0 +1,9 @@
+{% if staff_list %}
+    <ul>
+    {% for staff in staff_list %}
+        <li><a href="/staff/{{ staff.sid }}/">{{ staff.sname }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No staff are available.</p>
+{% endif %}
