@@ -1,9 +1,17 @@
-{% if staff_list %}
-    <ul>
-    {% for staff in staff_list %}
-        <li><a href="/staff/{{ staff.sid }}/">{{ staff.sname }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No staff are available.</p>
-{% endif %}
+{% load static %}
+<html>
+  <head>
+    <link rel="stylesheet" href="{% static 'ownerview/bootstrap/css/bootstrap.min.css' %}">
+  </head>
+  <body>
+    {% if staff_list %}
+        <ul>
+        {% for staff in staff_list %}
+            <li><a href="/staff/{{ staff.sid }}/">{{ staff.sname }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No staff are available.</p>
+    {% endif %}
+  </body>
+</html>
