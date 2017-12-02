@@ -42,10 +42,10 @@
           <div class="collapse navbar-collapse" id="navbarText">
               <ul class="navbar-nav mr-auto">
                   <li class="nav-item active">
-                      <a class="nav-link" href="#">Overview<span class="sr-only">(current)</span></a>
+                      <a class="nav-link" href="{% url 'ownerview:index' %}">Overview<span class="sr-only">(current)</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="roster.html">Roster</a>
+                      <a class="nav-link" href="{% url 'ownerview:roster' %}">Roster</a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link" href="#">Payment</a>
@@ -62,54 +62,14 @@
 
 
     {% if staff_list %}
+
     <br/>
-    
-    <table>
-        <tr>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">December</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">1</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">2</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">3</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">4</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">5</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">6</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">7</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">
-                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <button type="button" class="btn btn-warning btn-sm"><</button>
-                    <button type="button" class="btn btn-warning btn-sm">Week</button>
-                    <button type="button" class="btn btn-warning btn-sm">></button>
-                </div>
-            </th>
-        </tr>
-        <tr>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;"></th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">Monday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">Tuesday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">Wednesday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">Thursday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">Friday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">Saturday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white;">Sunday</th>
-            <th style="background: rgb(52, 58, 64); color: white;">Hours</th>
-        </tr>
-
+    <ul>
         {% for staff in staff_list %}
-        <tr>
-            <td style="background: rgb(52, 58, 64); color: white; text-align: left; border-color: rgb(52, 58, 64);"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td style="background: rgb(110, 110, 110); color: white;">0.0</td>
-          {# <td style="background: rgb(0, 123, 255); color: white;">0.0</td> #}
-        </tr>
+            <li><a href="/staff/{{ satff.id }}/">{{ staff.sname }}</a></li>
         {% endfor %}
-      </table>
-
+    </ul>
+    
     {% else %}
         <p>No staff are available.</p>
     {% endif %}

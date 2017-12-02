@@ -18,3 +18,8 @@ def index(request):
     staff_list = Staff.objects.order_by('sname')
     context = {'staff_list': staff_list}
     return render(request, 'ownerview/index.html', context)
+
+def roster(request):
+    staff_list = Staff.objects.order_by('sname')
+    context = {'staff_list': staff_list}
+    return render(request, 'ownerview/roster.html', context)
