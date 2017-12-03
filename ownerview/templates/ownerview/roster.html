@@ -30,6 +30,8 @@
         text-align: center;
       }
     </style>
+
+
   </head>
   <body>
 
@@ -71,7 +73,7 @@
 
     <div style="float: right; margin-right: 8px; margin-top: 5px">
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-            <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true" autocomplete="off">Sort Location</button>
+            {# <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true" autocomplete="off">Sort Location</button> #}
 
             <div class="btn-group" role="group">
                 <button id="btnGroupDrop1" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -97,14 +99,13 @@
                     <button type="button" class="btn btn-light btn-sm">></button>
                 </div>
             </th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">1 Dec</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">2 Dec</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">3 Dec</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">4 Dec</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">5 Dec</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">6 Dec</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">7 Dec</th>
+            
+            
+        {% for days in days_list %}
+            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">{{ days|date:"d M"}}</th>
+        {% endfor %}
             <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white"></th>
+
         </tr>
         <tr>
             <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 10px"><span class="badge badge-pill badge-danger">Emporium Melbourne</span></th>
