@@ -10,16 +10,37 @@ from __future__ import unicode_literals
 from django.db import models
 
 
+class Event(models.Model):
+    eid = models.AutoField(primary_key=True)
+    ename = models.CharField(max_length=30, blank=True, null=True)
+    edate = models.DateField()
+    etype = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'EVENT'
+
+
 class History(models.Model):
     hid = models.AutoField(primary_key=True)
     hdate = models.DateField()
-    hstarttime = models.TimeField()
-    hendtime = models.TimeField()
+    hstarttime = models.TimeField(blank=True, null=True)
+    hendtime = models.TimeField(blank=True, null=True)
+    hnote = models.CharField(max_length=10, blank=True, null=True)
     sid = models.IntegerField()
 
     class Meta:
         managed = False
         db_table = 'HISTORY'
+
+
+class Location(models.Model):
+    lid = models.AutoField(primary_key=True)
+    lname = models.CharField(max_length=30)
+
+    class Meta:
+        managed = False
+        db_table = 'LOCATION'
 
 
 class Roster(models.Model):
@@ -28,6 +49,7 @@ class Roster(models.Model):
     rstarttime = models.TimeField()
     rendtime = models.TimeField()
     sid = models.IntegerField()
+    lid = models.IntegerField()
 
     class Meta:
         managed = False
