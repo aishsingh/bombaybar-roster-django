@@ -9,6 +9,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <script src="{% static 'ownerview/jquery/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'ownerview/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <script>
+        if ({{ day_of_week }} == 1) {
+        }
+        else if ({{ day_of_week }} == 2) {
+        }
+        else if ({{ day_of_week }} == 3) {
+        }
+        else if ({{ day_of_week }} == 4) {
+        }
+        else if ({{ day_of_week }} == 5) {
+        }
+        else if ({{ day_of_week }} == 6) {
+        }
+        else if ({{ day_of_week }} == 7) {
+        }
+    </script>
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'ownerview/bootstrap/css/bootstrap.min.css' %}">
 
@@ -30,7 +50,6 @@
         text-align: center;
       }
     </style>
-
 
   </head>
   <body>
@@ -65,12 +84,6 @@
 
     {% if staff_list %}
 
-    {# <div style="margin-left: 8px; margin-top: 5px" class="btn-group" role="group" aria-label="Button group with nested dropdown"> #}
-    {#     <button type="button" class="btn btn-primary"><</button> #}
-    {#     <button type="button" class="btn btn-primary">Week</button> #}
-    {#     <button type="button" class="btn btn-primary">></button> #}
-    {# </div> #}
-
     <div style="float: right; margin-right: 8px; margin-top: 5px">
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             {# <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true" autocomplete="off">Sort Location</button> #}
@@ -90,21 +103,21 @@
         <button type="button" class="btn btn-primary">Edit</button>
     </div>
 
-    <table style="margin-top: 55px">
+    <table id="roster-table" style="margin-top: 55px">
         <tr>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">
+            <td style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                     <button type="button" class="btn btn-light btn-sm"><</button>
                     <button type="button" class="btn btn-light btn-sm">Week</button>
                     <button type="button" class="btn btn-light btn-sm">></button>
                 </div>
-            </th>
+            </td>
             
             
         {% for days in days_list %}
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">{{ days|date:"d M"}}</th>
+            <td style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">{{ days|date:"j M"}}</td>
         {% endfor %}
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white"></th>
+            <td style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white"></td>
 
         </tr>
         <tr>
@@ -121,7 +134,12 @@
 
         {% for staff in staff_list %}
         <tr>
-          <td style="background: rgb(52, 58, 64); color: white; text-align: left; border-color: rgb(52, 58, 64);"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
+          {% if staff.sposition == 1 %}
+              <td style="background: rgb(52, 58, 64); color: white; text-align: left; border-color: rgb(52, 58, 64);"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
+          {% else %}
+              <td style="background: rgb(52, 58, 64); color: white; text-align: left; border-color: rgb(52, 58, 64);"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
+          {% endif %}
+
           <td>x</td>
           <td>x</td>
           <td>x</td>
@@ -148,7 +166,12 @@
 
         {% for staff in staff_list %}
         <tr>
-          <td style="background: rgb(52, 58, 64); color: white; text-align: left; border-color: rgb(52, 58, 64);"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
+          {% if staff.sposition == 1 %}
+              <td style="background: rgb(52, 58, 64); color: white; text-align: left; border-color: rgb(52, 58, 64);"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
+          {% else %}
+              <td style="background: rgb(52, 58, 64); color: white; text-align: left; border-color: rgb(52, 58, 64);"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
+          {% endif %}
+
           <td>x</td>
           <td>x</td>
           <td>x</td>
