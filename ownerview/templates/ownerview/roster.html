@@ -13,20 +13,38 @@
     <script src="{% static 'ownerview/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
     <script>
-        if ({{ day_of_week }} == 1) {
-        }
-        else if ({{ day_of_week }} == 2) {
-        }
-        else if ({{ day_of_week }} == 3) {
-        }
-        else if ({{ day_of_week }} == 4) {
-        }
-        else if ({{ day_of_week }} == 5) {
-        }
-        else if ({{ day_of_week }} == 6) {
-        }
-        else if ({{ day_of_week }} == 7) {
-        }
+
+        $(document).ready(function()
+        {
+            var targetIndex, elements;
+            targetIndex = $("th, td").index() + 1 + {{ day_of_week }};
+            elements = $("th, td");
+            {# elements.filter(":nth-child(" + targetIndex + ")").fadeTo(250, 1); #}
+            elements.filter(":nth-child(" + targetIndex + ")").css("background-color", "rgba(0, 123, 255, 0.8)");
+            {# elements.filter(":nth-child(" + targetIndex + ")").css("background-color", "rgba(220, 53, 69, 0.5)"); #}
+            elements.filter(":nth-child(" + targetIndex + ")").css("color", "white");
+            {# elements.filter(":nth-child(" + targetIndex + ")").css("border", "none"); #}
+
+            $("tr").mouseover(function()
+            {
+                var targetIndex, elements;
+                targetIndex = $(this).index() + 1;
+                elements = $("tr");
+                {# elements.filter(":nth-child(" + targetIndex + ")").css("background-color", "rgba(220, 53, 69, 0.5)"); #}
+                elements.filter(":nth-child(" + targetIndex + ")").css("background-color", "rgba(0, 123, 255, 1)");
+                {# elements.filter(":nth-child(" + targetIndex + ")").fadeTo(0, 0.5); #}
+                {# elements.not(":nth-child(" + targetIndex + ")").fadeTo(250, 0.5); #}
+            });
+            $("table tr").mouseleave(function()
+            {
+                $("tr").css("background-color", "transparent");
+                {# $("tr").fadeTo(0, 1); #}
+            });
+
+            {# elements.filter(":nth-child(" + targetIndex + ")").fadeTo(250, 0.8); #}
+            {# elements.not(":nth-child(" + targetIndex + ")").fadeTo(250, 0.5); #}
+        });
+
     </script>
 
     <!-- Bootstrap CSS -->
@@ -39,7 +57,7 @@
       table {
         table-layout: fixed;
         width: 100%;
-        background: white;
+        background: transparent;
       }
       table, th, td {
         border: 1px solid rgb(52, 58, 64);
@@ -107,9 +125,9 @@
         <tr>
             <td style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <button type="button" class="btn btn-secondary btn-sm"><</button>
-                    <button type="button" class="btn btn-secondary btn-sm">Week</button>
-                    <button type="button" class="btn btn-secondary btn-sm">></button>
+                    <button type="button" class="btn btn-light btn-sm"><</button>
+                    <button type="button" class="btn btn-light btn-sm">Week</button>
+                    <button type="button" class="btn btn-light btn-sm">></button>
                 </div>
             </td>
             
@@ -135,19 +153,20 @@
         {% for staff in staff_list %}
         <tr>
           {% if staff.sposition == 1 %}
-              <td style="background: rgb(52, 58, 64); color: white; text-align: left; border-color: rgb(52, 58, 64);"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
+              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
           {% else %}
-              <td style="background: rgb(52, 58, 64); color: white; text-align: left; border-color: rgb(52, 58, 64);"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
+              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
           {% endif %}
 
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td style="background: rgb(110, 110, 110); color: white;">0.0</td>
+
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(110, 110, 110, 0.3); color: white;">0.0</td>
           {# <td style="background: rgb(0, 123, 255); color: white;">0.0</td> #}
         </tr>
         {% endfor %}
@@ -167,19 +186,19 @@
         {% for staff in staff_list %}
         <tr>
           {% if staff.sposition == 1 %}
-              <td style="background: rgb(52, 58, 64); color: white; text-align: left; border-color: rgb(52, 58, 64);"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
+              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
           {% else %}
-              <td style="background: rgb(52, 58, 64); color: white; text-align: left; border-color: rgb(52, 58, 64);"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
+              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
           {% endif %}
 
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td>x</td>
-          <td style="background: rgb(110, 110, 110); color: white;">0.0</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.7); color: black;">x</td>
+          <td style="background: rgba(110, 110, 110, 0.3); color: white;">0.0</td>
           {# <td style="background: rgb(0, 123, 255); color: white;">0.0</td> #}
         </tr>
         {% endfor %}
