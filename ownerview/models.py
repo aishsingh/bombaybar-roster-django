@@ -10,6 +10,22 @@ from __future__ import unicode_literals
 from django.db import models
 
 
+class Staff(models.Model):
+    sid = models.AutoField(primary_key=True)
+    sname = models.CharField(max_length=30)
+    spayrate = models.FloatField()
+    spayfixed = models.BooleanField()
+    sposition = models.IntegerField()
+    snote = models.CharField(max_length=30, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.sname
+
+    class Meta:
+        managed = False
+        db_table = 'STAFF'
+
+
 class Event(models.Model):
     eid = models.AutoField(primary_key=True)
     ename = models.CharField(max_length=30, blank=True, null=True)
@@ -27,7 +43,7 @@ class History(models.Model):
     hstarttime = models.TimeField(blank=True, null=True)
     hendtime = models.TimeField(blank=True, null=True)
     hnote = models.CharField(max_length=10, blank=True, null=True)
-    sid = models.IntegerField()
+    staff = models.ForeignKey(Staff, db_column='sid', on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -48,28 +64,16 @@ class Roster(models.Model):
     rday = models.IntegerField()
     rstarttime = models.TimeField()
     rendtime = models.TimeField()
-    sid = models.IntegerField()
-    lid = models.IntegerField()
+    staff = models.ForeignKey(Staff, db_column='sid', on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, db_column='lid', on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return "%s from %s to %s" % (self.rday, self.rstarttime, self.rendtime)
 
     class Meta:
         managed = False
         db_table = 'ROSTER'
 
-
-class Staff(models.Model):
-    sid = models.AutoField(primary_key=True)
-    sname = models.CharField(max_length=30)
-    spayrate = models.FloatField()
-    spayfixed = models.BooleanField()
-    sposition = models.IntegerField()
-    snote = models.CharField(max_length=30, blank=True, null=True)
-
-    def __unicode__(self):
-        return self.sname
-
-    class Meta:
-        managed = False
-        db_table = 'STAFF'
 
 
 # class AuthGroup(models.Model):
