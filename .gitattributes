@@ -1,2 +1,3 @@
 ownerview/static/ownerview/bootstrap/* linguist-vendored
 ownerview/static/ownerview/jquery/* linguist-vendored
+*.html linguist-language=Python
