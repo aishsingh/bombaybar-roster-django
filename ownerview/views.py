@@ -34,12 +34,15 @@ def roster(request):
     roster_list = Roster.objects.order_by('rid')
     days_list = get_week_days(date.today().year, date.today().isocalendar()[1])
     day_of_week = date.today().isoweekday()
+    weekly_roster = Roster.objects.order_by('staff__sname')
+    # weekly_roster = Staff.objects.filter(roster__rday='0')
 
     context = {
             'staff_list': staff_list,
             'roster_list': roster_list,
             'days_list': days_list,
             'day_of_week': day_of_week,
+            'weekly_roster': weekly_roster,
             }
     return render(request, 'ownerview/roster.html', context)
 

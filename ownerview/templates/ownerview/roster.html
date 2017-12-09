@@ -138,8 +138,8 @@
                     Export
                 </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                    <a class="dropdown-item" href="#">Export to PDF</a>
-                    <a class="dropdown-item" href="#">Export to CSV</a>
+                    <a class="dropdown-item" href="#"><strike>Export to PDF</strike></a>
+                    <a class="dropdown-item" href="#"><strike>Export to CSV</strike></a>
                 </div>
             </div>
         </div>
@@ -186,14 +186,27 @@
           {% endif %}
 
 
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(110, 110, 110, 0.3); color: white;">0.0</td>
+          {% for roster in weekly_roster %}
+              {% if staff.sid == roster.staff_id %}
+                  {% if roster.rday == 1 %}
+                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
+                  {% elif roster.rday == 2 %}
+                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
+                  {% elif roster.rday == 3 %}
+                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
+                  {% elif roster.rday == 4 %}
+                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
+                  {% elif roster.rday == 5 %}
+                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
+                  {% elif roster.rday == 6 %}
+                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
+                  {% elif roster.rday == 7 %}
+                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
+                  {% endif %}
+              {% endif %}
+          {% endfor %}
+
+          {# <td style="background: rgba(110, 110, 110, 0.3); color: white;">0.0</td> #}
           {# <td style="background: rgb(0, 123, 255); color: white;">0.0</td> #}
         </tr>
         {% endfor %}
