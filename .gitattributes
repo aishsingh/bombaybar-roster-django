@@ -1,3 +1,4 @@
 ownerview/static/ownerview/bootstrap/* linguist-vendored
 ownerview/static/ownerview/jquery/* linguist-vendored
+ownerview/static/ownerview/moment/* linguist-vendored
 *.html linguist-language=Python
