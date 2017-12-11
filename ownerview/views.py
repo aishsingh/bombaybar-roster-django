@@ -23,17 +23,6 @@ class LazyEncoder(DjangoJSONEncoder):
             return r
         return super(LazyEncoder, self).default(obj)
 
-def get_week_days(year, week):
-    d = date(year,1,1)
-    if(d.weekday()>3):
-        d = d+timedelta(7-d.weekday())
-    else:
-        d = d - timedelta(d.weekday())
-    dlt = timedelta(days = (week-1)*7)
-    # return d + dlt,  d + dlt + timedelta(days=6)
-    return d + dlt, d + dlt + timedelta(days=1), d + dlt + timedelta(days=2), d + dlt + timedelta(days=3), d + dlt + timedelta(days=4), d + dlt + timedelta(days=5), d + dlt + timedelta(days=6)
-
-
 @login_required
 def index(request):
     staff_list = Staff.objects.order_by('sname')
@@ -51,18 +40,8 @@ def get_weekly_roster(request):
 @login_required
 def roster(request):
     staff_list = Staff.objects.order_by('sname')
-    roster_list = Roster.objects.order_by('rid')
-    days_list = get_week_days(date.today().year, date.today().isocalendar()[1])
-    day_of_week = date.today().isoweekday()
-    weekly_roster = Roster.objects.order_by('staff__sname')
 
-    context = {
-            'staff_list': staff_list,
-            'roster_list': roster_list,
-            'days_list': days_list,
-            'day_of_week': day_of_week,
-            'weekly_roster': weekly_roster,
-            }
+    context = { 'staff_list': staff_list }
     return render(request, 'ownerview/roster.html', context)
 
 @login_required

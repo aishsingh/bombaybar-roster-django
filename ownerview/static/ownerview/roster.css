@@ -1,0 +1,21 @@
+body {
+    background: rgb(52, 58, 64);
+}
+table {
+    table-layout: fixed;
+    width: 100%;
+    min-width: 900px;
+    background: transparent;
+}
+/*
+    table td:first-child {
+    width: 50px;
+}*/
+table, th, td {
+    border: 1px solid rgb(52, 58, 64);
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px 2px 2px 5px;
+    text-align: center;
+}
