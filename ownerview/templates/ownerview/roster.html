@@ -16,6 +16,22 @@
 
         $(document).ready(function()
         {
+            $.ajax({
+                    url: '/getweeklyroster',
+                    type: 'GET',
+                    success: function(data) {
+                        var roster = JSON.parse(data);
+
+                        for (var i = 0; i < roster.length; i++) {
+                            var rowid = $("td[data-sid='" + roster[i].fields.staff +"']").parent().index();
+                            $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster[i].fields.rday + ")").html(roster[i].fields.rstarttime + " - " + roster[i].fields.rendtime);
+                        }
+                    },
+                    failure: function(data) { 
+                        alert('Error fetching roster data');
+                    }
+            }); 
+
             // Highlight current day column
             if ({{ day_of_week }}) {
                 var targetIndex, elements;
@@ -180,9 +196,9 @@
         {% for staff in staff_list %}
         <tr>
           {% if staff.sposition == 1 %}
-              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" data-sid="{{ staff.sid }}" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
+              <td style="background: transparent; color: white; text-align: left; border-color: transparent;" data-sid="{{ staff.sid }}"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
           {% else %}
-              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" data-sid="{{ staff.sid }}" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
+              <td style="background: transparent; color: white; text-align: left; border-color: transparent;" data-sid="{{ staff.sid }}"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
           {% endif %}
 
 

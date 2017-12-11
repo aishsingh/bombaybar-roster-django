@@ -4,18 +4,24 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from datetime import date, timedelta
-# from django.core.serializers.json import DjangoJSONEncoder
+from datetime import date, time, timedelta
+from django.utils.timezone import is_aware
+from django.core.serializers.json import DjangoJSONEncoder
 from django.core.serializers import serialize
 
 from .models import Staff, Roster
 
 
-# class LazyEncoder(DjangoJSONEncoder):
-#     def default(self, obj):
-#         if isinstance(obj, Roster):
-#             return str(obj)
-        # return super().default(obj)
+class LazyEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, time):
+            if is_aware(obj):
+                raise ValueError("JSON can't represent timezone-aware times.")
+            r = obj.strftime("%H:%M")
+            if obj.microsecond:
+                r = r[:12]
+            return r
+        return super(LazyEncoder, self).default(obj)
 
 def get_week_days(year, week):
     d = date(year,1,1)
@@ -38,8 +44,8 @@ def index(request):
 @login_required
 def get_weekly_roster(request):
     weekly_roster = Roster.objects.order_by('staff__sname')
-    serialized = serialize('json', weekly_roster)
-    return HttpResponse(serialized, content_type="application/json")
+    serialized = serialize('json', weekly_roster, cls=LazyEncoder)
+    return HttpResponse(serialized, content_type="application/javascript")
 
 
 @login_required
