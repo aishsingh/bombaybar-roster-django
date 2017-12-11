@@ -10,10 +10,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <script src="{% static 'ownerview/jquery/jquery-3.2.1.min.js' %}"></script>
-    <script src="{% static 'ownerview/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'ownerview/jquery-ui/jquery-ui.min.js' %}"></script>
     <script src="{% static 'ownerview/moment/moment.min.js' %}"></script>
+    <script src="{% static 'ownerview/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'ownerview/roster.js' %}"></script>
 
+    <link rel="stylesheet" href="{% static 'ownerview/jquery-ui/jquery-ui.min.css' %}">
     <link rel="stylesheet" href="{% static 'ownerview/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'ownerview/roster.css' %}">
 
@@ -48,7 +50,6 @@
       </nav>
 
 
-    {% if staff_list %}
 
     <div style="float: right; margin-right: 8px; margin-top: 5px">
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
@@ -69,12 +70,14 @@
         <button type="button" class="btn btn-primary">Edit</button>
     </div>
 
+    <input type="hidden" id="week-picker"/>
+    {% if staff_list %}
     <table id="roster-table" style="margin-top: 55px">
         <tr id="week-dates">
             <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                     <button type="button" class="btn btn-light btn-sm" id="prev-week-btn"><</button>
-                    <button type="button" class="btn btn-light btn-sm">Week</button>
+                    <button type="button" class="btn btn-light btn-sm" id="week-btn">Week</button>
                     <button type="button" class="btn btn-light btn-sm" id="next-week-btn">></button>
                 </div>
             </th>

@@ -4,6 +4,8 @@ var day_of_week = moment().day();
 function calcWeekDates() {
     moment.locale('en');
 
+    $("#week-btn").html("W" + (moment().add(week_offset, 'weeks').isoWeek()));
+
     // Determine dates of the week
     var day = moment().add(week_offset, 'weeks').startOf('isoWeek')
     var date_cells = document.getElementById("week-dates").children;
@@ -40,15 +42,6 @@ function calcWeekDates() {
 
 $(document).ready(function()
 {
-    document.getElementById("prev-week-btn").onclick = function() {
-        week_offset--;
-        calcWeekDates();
-    };
-    document.getElementById("next-week-btn").onclick = function() {
-        week_offset++;
-        calcWeekDates();
-    };
-
     // Fetch Staff Rosters
     $.ajax({
             url: '/getweeklyroster',
@@ -108,5 +101,40 @@ $(document).ready(function()
             cell.css("background-color", "rgba(255, 255, 255, 0.7)");
             cell.css("color", "black");
         }
+    });
+
+
+    //Initialize the jqueryui datepicker
+    $( "#week-picker" ).datepicker({
+            showWeek: true,
+            showOtherMonths: true,
+            selectOtherMonths: false,
+            firstDay: 1,
+            showAnim: "slideDown",
+            weekHeader: "#",
+            onSelect: function(dateText, inst) {
+                var week_a = moment(dateText).isoWeek();
+                week_offset = week_a - moment().isoWeek();
+
+                calcWeekDates();
+            }
+    });
+
+    $("#week-btn").click(function(event) {
+        $("#week-picker").datepicker("show")
+        $(this).mouseout();
+    });
+    $("#prev-week-btn").click(function(event) {
+        week_offset--;
+        calcWeekDates();
+    });
+    $("#next-week-btn").click(function(event) {
+        week_offset++;
+        calcWeekDates();
+    });
+
+    // FIX to remove bootstrap button focus
+    $(".btn").click(function(event) {
+        $(this).blur(); // Removes focus of the button.
     });
 });
