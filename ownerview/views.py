@@ -3,13 +3,19 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from datetime import date, timedelta
+# from django.core.serializers.json import DjangoJSONEncoder
+from django.core.serializers import serialize
 
 from .models import Staff, Roster
 
 
-from datetime import date, timedelta
-
-from django.contrib.auth.decorators import login_required
+# class LazyEncoder(DjangoJSONEncoder):
+#     def default(self, obj):
+#         if isinstance(obj, Roster):
+#             return str(obj)
+        # return super().default(obj)
 
 def get_week_days(year, week):
     d = date(year,1,1)
@@ -28,6 +34,14 @@ def index(request):
     context = {'staff_list': staff_list}
     return render(request, 'ownerview/index.html', context)
 
+
+@login_required
+def get_weekly_roster(request):
+    weekly_roster = Roster.objects.order_by('staff__sname')
+    serialized = serialize('json', weekly_roster)
+    return HttpResponse(serialized, content_type="application/json")
+
+
 @login_required
 def roster(request):
     staff_list = Staff.objects.order_by('sname')
@@ -35,7 +49,6 @@ def roster(request):
     days_list = get_week_days(date.today().year, date.today().isocalendar()[1])
     day_of_week = date.today().isoweekday()
     weekly_roster = Roster.objects.order_by('staff__sname')
-    # weekly_roster = Staff.objects.filter(roster__rday='0')
 
     context = {
             'staff_list': staff_list,

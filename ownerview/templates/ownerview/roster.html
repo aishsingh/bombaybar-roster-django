@@ -180,37 +180,44 @@
         {% for staff in staff_list %}
         <tr>
           {% if staff.sposition == 1 %}
-              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
+              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" data-sid="{{ staff.sid }}" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
           {% else %}
-              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
+              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" data-sid="{{ staff.sid }}" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
           {% endif %}
 
 
-          {% for roster in weekly_roster %}
-              {% if staff.sid == roster.staff_id %}
-                  {% if roster.rday == 1 %}
-                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
-                  {% elif roster.rday == 2 %}
-                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
-                  {% elif roster.rday == 3 %}
-                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
-                  {% elif roster.rday == 4 %}
-                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
-                  {% elif roster.rday == 5 %}
-                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
-                  {% elif roster.rday == 6 %}
-                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
-                  {% elif roster.rday == 7 %}
-                  <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td>
-                  {% endif %}
-              {% endif %}
-          {% endfor %}
+          {# {% for roster in weekly_roster %} #}
+          {#     {% if staff.sid == roster.staff_id %} #}
+          {#         {% if roster.rday == 1 %} #}
+          {#         <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td> #}
+          {#         {% elif roster.rday == 2 %} #}
+          {#         <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td> #}
+          {#         {% elif roster.rday == 3 %} #}
+          {#         <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td> #}
+          {#         {% elif roster.rday == 4 %} #}
+          {#         <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td> #}
+          {#         {% elif roster.rday == 5 %} #}
+          {#         <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td> #}
+          {#         {% elif roster.rday == 6 %} #}
+          {#         <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td> #}
+          {#         {% elif roster.rday == 7 %} #}
+          {#         <td style="background: rgba(255, 255, 255, 0.2); color: white;">{{ roster.rstarttime|date:"G:i" }} - {{ roster.rendtime|date:"G:i" }}</td> #}
+          {#         {% endif %} #}
+          {#     {% endif %} #}
+          {# {% endfor %} #}
 
-          {# <td style="background: rgba(110, 110, 110, 0.3); color: white;">0.0</td> #}
-          {# <td style="background: rgb(0, 123, 255); color: white;">0.0</td> #}
+          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
+          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
+          <td style="background: rgba(110, 110, 110, 0.3); color: white;">0.0</td>
         </tr>
         {% endfor %}
 
+        <!--
         <tr>
             <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 30px"><span class="badge badge-pill badge-danger">Westfield Doncaster</span></th>
             <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 30px">Monday</th>
@@ -242,6 +249,7 @@
           {# <td style="background: rgb(0, 123, 255); color: white;">0.0</td> #}
         </tr>
         {% endfor %}
+        -->
 
 
 
