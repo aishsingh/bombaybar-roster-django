@@ -12,6 +12,13 @@
     <script src="{% static 'ownerview/jquery-ui/jquery-ui.min.js' %}"></script>
     <script src="{% static 'ownerview/moment/moment.min.js' %}"></script>
     <script src="{% static 'ownerview/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'ownerview/tableexport/xlsx.core.min.js' %}"></script>
+    <script src="{% static 'ownerview/tableexport/FileSaver.min.js' %}"></script>
+    <script src="{% static 'ownerview/tableexport/tableexport.min.js' %}"></script>
+    {# <script src="{% static 'ownerview/tableExport/jquery.base64.js' %}"></script> #}
+    {# <script src="{% static 'ownerview/tableExport/jspdf/libs/sprintf.js' %}"></script> #}
+    {# <script src="{% static 'ownerview/tableExport/jspdf/jspdf.js' %}"></script> #}
+    {# <script src="{% static 'ownerview/tableExport/jspdf/libs/base64.js' %}"></script> #}
     <script src="{% static 'ownerview/roster.js' %}"></script>
 
     <link rel="stylesheet" href="{% static 'ownerview/jquery-ui/jquery-ui.min.css' %}">
@@ -50,28 +57,34 @@
 
 
 
-    <div style="float: right; margin-right: 8px; margin-top: 5px">
+    <div id="buttons-top-left" style="float: left; margin-left: 8px; margin-top: 0px">
+        {# <button type="button" class="btn btn-secondary">Test</button> #}
+    </div>
+
+    <div id="buttons-top-right" style="float: right; margin-right: 8px; margin-top: 0px">
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             {# <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true" autocomplete="off">Sort Location</button> #}
 
             <div class="btn-group" role="group">
-                <button id="btnGroupDrop1" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button id="export-groupdropdown" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
                     Export
                 </button>
-                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                    <a class="dropdown-item" href="#"><strike>Export to PDF</strike></a>
-                    <a class="dropdown-item" href="#"><strike>Export to CSV</strike></a>
+                <div class="dropdown-menu" aria-labelledby="export-groupdropdown">
+                    <button type="button" class="dropdown-item" id="export-xls-btn">Export to XLS</button>
+                    <button type="button" class="dropdown-item" id="export-csv-btn">Export to CSV</button>
+                    <button type="button" class="dropdown-item" id="export-pdf-btn"><strike>Export to PDF</strike></button>
                 </div>
             </div>
         </div>
 
-        <button id="edit-btn" type="button" class="btn btn-primary">Edit</button>
+        <button id="save-btn" type="button" class="btn btn-success">Save</button>
+        <button id="edit-btn" type="button" class="btn btn-primary" disabled>Edit</button>
     </div>
 
     <input type="hidden" id="week-picker"/>
 
     {% if staff_list %}
-    <table id="roster-table" style="margin-top: 55px">
+    <table id="roster-table">
         <tr id="week-dates">
             <th>
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">

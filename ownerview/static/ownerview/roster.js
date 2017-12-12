@@ -1,6 +1,8 @@
-var week_offset = 0;
-var day_of_week = moment().day();
-var edit_mode = false;
+var week_offset;
+var day_of_week;
+var edit_mode;
+var roster_instance;
+var roster_data_received;
 
 function calcWeekDates() {
     moment.locale('en');
@@ -55,10 +57,55 @@ function calcWeekDates() {
             elements.filter(":nth-child(" + i + ")").css("color", "white");
         }
     }
+
+    if (roster_data_received) prepareExportData();
+}
+
+function prepareExportData() {
+    roster_instance = $("table").tableExport({
+            headers: true,                              // (Boolean), display table headers (th or td elements) in the <thead>, (default: true)
+            footers: true,                              // (Boolean), display table footers (th or td elements) in the <tfoot>, (default: false)
+            formats: ['xls', 'csv', 'xlsx'],            // (String[]), filetype(s) for the export, (default: ['xls', 'csv', 'txt'])
+            filename: 'id',                             // (id, String), filename for the downloaded file, (default: 'id')
+            exportButtons: false,                       // (Boolean), automatically generate the built-in export buttons for each of the specified formats (default: true)
+            ignoreRows: null,                           // (Number, Number[]), row indices to exclude from the exported file(s) (default: null)
+            ignoreCols: null,                           // (Number, Number[]), column indices to exclude from the exported file(s) (default: null)
+            trimWhitespace: true
+    }); 
+
+    // Setup exports
+    $('#export-xls-btn').off('click').on('click', function() {
+        var exportData = roster_instance.getExportData()['roster-table']['xls'];
+        roster_instance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
+    });
+    $('#export-csv-btn').off('click').on('click', function() {
+        var exportData = roster_instance.getExportData()['roster-table']['csv'];
+        roster_instance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
+    });
+    $('#export-pdf-btn').off('click').on('click', function() { //TODO
+        // var exportData = roster_instance.getExportData()['roster-table']['pdf'];
+        // roster_instance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
+    });
+}
+
+function allDataReceived() {
+    roster_data_received = true;
+    $("#export-groupdropdown").prop('disabled', false);
+    $("#edit-btn").prop('disabled', false);
+
+    prepareExportData();
 }
 
 $(document).ready(function()
 {
+    week_offset = 0;
+    day_of_week = moment().day();
+    edit_mode = false;
+    roster_instance = null;
+    roster_data_recieved = false;
+
+    calcWeekDates();    
+
     // Fetch Staff Rosters
     $.ajax({
             url: '/getweeklyroster',
@@ -67,16 +114,16 @@ $(document).ready(function()
                 var roster = JSON.parse(data);
 
                 for (var i = 0; i < roster.length; i++) {
-                    var rowid = $("td[data-sid='" + roster[i].fields.staff +"']").parent().index();
+                    var rowid = $("#roster-table td[data-sid='" + roster[i].fields.staff +"']").closest('tr').index();
                     $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster[i].fields.rday + ")").html(roster[i].fields.rstarttime + " - " + roster[i].fields.rendtime);
                 }
+
+                allDataReceived();
             },
             failure: function(data) { 
                 alert('Error fetching roster data');
             }
     }); 
-    
-    calcWeekDates();    
 
     // Highlight only when mouseover first row
     $("table td:first-child").mouseover(function()
@@ -122,7 +169,7 @@ $(document).ready(function()
 
 
     //Initialize the jqueryui datepicker
-    $( "#week-picker" ).datepicker({
+    $("#week-picker").datepicker({
             showWeek: true,
             showOtherMonths: true,
             showButtonPanel: false,
@@ -151,13 +198,11 @@ $(document).ready(function()
                 selectCurrentWeek();
             }
     }).datepicker('widget').addClass('ui-weekpicker');;
-
     var selectCurrentWeek = function() {
         window.setTimeout(function () {
             $('#week-picker').datepicker('widget').find('.ui-datepicker-current-day a').addClass('ui-state-active')
         }, 1);
     }
-
     $('.ui-weekpicker').on('mousemove', 'tr', function () {
         $(this).find('td a').addClass('ui-state-hover');
     });
@@ -165,21 +210,23 @@ $(document).ready(function()
         $(this).find('td a').removeClass('ui-state-hover');
     });
 
+    // Button events
     $(document).on('click', '#edit-btn', function(event) {
         if (!edit_mode) {
-            $("#edit-btn").removeClass( "btn-primary" ).addClass( "btn-success" ).html("Save");
+            $("#edit-btn").removeClass( "btn-primary" ).addClass( "btn-danger" ).html("Cancel");
+            $("#save-btn").show();
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "dashed");
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "white");
             edit_mode = true;
         }
         else {
-            $("#edit-btn").removeClass( "btn-success" ).addClass( "btn-primary" ).html("Edit");
+            $("#edit-btn").removeClass( "btn-danger" ).addClass( "btn-primary" ).html("Edit");
+            $("#save-btn").hide();
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "solid");
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "rgb(52, 58, 64)");
             edit_mode = false;
         }
     });
-
     $(document).on('click', '#week-btn', function(event) {
         $("#week-picker").datepicker("show");
     });

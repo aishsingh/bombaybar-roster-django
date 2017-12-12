@@ -48,3 +48,6 @@ body {
     color: white;
     text-align: center;
 }
+#save-btn {
+    display: none;
+}
