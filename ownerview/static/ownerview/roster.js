@@ -5,9 +5,25 @@ function calcWeekDates() {
     moment.locale('en');
 
     $("#week-btn").html("W" + (moment().add(week_offset, 'weeks').isoWeek()));
+    if (!week_offset && $("#return-week-btn").length) {
+        $("#return-week-btn").remove();
+    }
+    else  {
+        if (week_offset > 0) {
+            $("#return-week-btn").remove();
+            $("#prev-week-btn").before('<button type="button" class="btn btn-light btn-sm" id="return-week-btn"><span class="ui-icon ui-icon-home"></span></button>');
+        }
+        else if (week_offset < 0){
+            $("#return-week-btn").remove();
+            $("#next-week-btn").after('<button type="button" class="btn btn-light btn-sm" id="return-week-btn"><span class="ui-icon ui-icon-home"></span></button>');
+        }
+    }
+
+    // Keep weekpicker updated
+    var day = moment().add(week_offset, 'weeks').startOf('isoWeek')
+    $("#week-picker").val(day.format("MM/DD/YYYY"));
 
     // Determine dates of the week
-    var day = moment().add(week_offset, 'weeks').startOf('isoWeek')
     var date_cells = document.getElementById("week-dates").children;
     for (var i = 1; i < date_cells.length-1; i++) {
         $(date_cells[i]).html(day.date() + " " + day.format("MMM"));
@@ -108,6 +124,7 @@ $(document).ready(function()
     $( "#week-picker" ).datepicker({
             showWeek: true,
             showOtherMonths: true,
+            showButtonPanel: false,
             selectOtherMonths: false,
             firstDay: 1,
             showAnim: "slideDown",
@@ -117,18 +134,48 @@ $(document).ready(function()
                 week_offset = week_a - moment().isoWeek();
 
                 calcWeekDates();
+                selectCurrentWeek();
+            },
+            beforeShow: function() {
+                selectCurrentWeek();
+            },
+            beforeShowDay: function(date) {
+                var cssClass = '';
+                var day = moment().add(week_offset, 'weeks')
+                if(date >= day.startOf('isoWeek') && date <= day.endOf('isoWeek'))
+                    cssClass = 'ui-datepicker-current-day';
+                return [true, cssClass];
+            },
+            onChangeMonthYear: function(year, month, inst) {
+                selectCurrentWeek();
             }
+    }).datepicker('widget').addClass('ui-weekpicker');;
+
+    var selectCurrentWeek = function() {
+        window.setTimeout(function () {
+            $('#week-picker').datepicker('widget').find('.ui-datepicker-current-day a').addClass('ui-state-active')
+        }, 1);
+    }
+
+    $('.ui-weekpicker').on('mousemove', 'tr', function () {
+        $(this).find('td a').addClass('ui-state-hover');
+    });
+    $('.ui-weekpicker').on('mouseleave', 'tr', function () {
+        $(this).find('td a').removeClass('ui-state-hover');
     });
 
-    $("#week-btn").click(function(event) {
-        $("#week-picker").datepicker("show")
-        $(this).mouseout();
+    $(document).on('click', '#week-btn', function(event) {
+        $("#week-picker").datepicker("show");
     });
-    $("#prev-week-btn").click(function(event) {
+    $(document).on('click', '#return-week-btn', function(event) {
+        week_offset = 0;
+        calcWeekDates();
+    });
+    $(document).on('click', '#prev-week-btn', function(event) {
         week_offset--;
         calcWeekDates();
     });
-    $("#next-week-btn").click(function(event) {
+    $(document).on('click', '#next-week-btn', function(event) {
         week_offset++;
         calcWeekDates();
     });

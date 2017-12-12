@@ -21,6 +21,3 @@ body {
     /* font-size: 1.2em; */
     font-weight: normal;
 }
-.bootstrap-datetimepicker-widget tr:hover {
-    background-color: #808080;
-}
