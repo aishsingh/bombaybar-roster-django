@@ -4,6 +4,29 @@ var edit_mode;
 var roster_instance;
 var roster_data_received;
 
+function calcStaffHours() {
+    $('#roster-table tr:gt(1)').each(function () {
+        var sid = null;
+        var hours = 0;
+
+        $(this).find('td').each(function () {
+            if ($(this).attr('class') == 'staff-cell')
+                sid = $(this).data('sid');
+            else if ($(this).attr('class') == 'hours-cell')
+                $(this).html(hours);
+            else {
+                if ($(this).html() != 'x') {
+                    var val = $(this).html().split(' - ');
+                    var starttime = moment(val[0], 'HH:mm');
+                    var endtime = moment(val[1], 'HH:mm');
+                    hours += endtime.diff(starttime, 'hours', true);
+                }
+            }
+        });
+        // console.log("sid: " + sid + ", hours: " + hours);
+    });
+}
+
 function calcWeekDates() {
     moment.locale('en');
 
@@ -93,6 +116,7 @@ function allDataReceived() {
     $("#export-groupdropdown").prop('disabled', false);
     $("#edit-btn").prop('disabled', false);
 
+    calcStaffHours();
     prepareExportData();
 }
 
