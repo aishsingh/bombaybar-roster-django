@@ -1,5 +1,6 @@
 var week_offset = 0;
 var day_of_week = moment().day();
+var edit_mode = false;
 
 function calcWeekDates() {
     moment.locale('en');
@@ -162,6 +163,21 @@ $(document).ready(function()
     });
     $('.ui-weekpicker').on('mouseleave', 'tr', function () {
         $(this).find('td a').removeClass('ui-state-hover');
+    });
+
+    $(document).on('click', '#edit-btn', function(event) {
+        if (!edit_mode) {
+            $("#edit-btn").removeClass( "btn-primary" ).addClass( "btn-success" ).html("Save");
+            $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "dashed");
+            $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "white");
+            edit_mode = true;
+        }
+        else {
+            $("#edit-btn").removeClass( "btn-success" ).addClass( "btn-primary" ).html("Edit");
+            $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "solid");
+            $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "rgb(52, 58, 64)");
+            edit_mode = false;
+        }
     });
 
     $(document).on('click', '#week-btn', function(event) {

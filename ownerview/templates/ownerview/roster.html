@@ -5,7 +5,6 @@
   <head>
     <title>Manage Roster</title>
 
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -66,97 +65,61 @@
             </div>
         </div>
 
-        <button type="button" class="btn btn-success">Save</button>
-        <button type="button" class="btn btn-primary">Edit</button>
+        <button id="edit-btn" type="button" class="btn btn-primary">Edit</button>
     </div>
 
     <input type="hidden" id="week-picker"/>
+
     {% if staff_list %}
     <table id="roster-table" style="margin-top: 55px">
         <tr id="week-dates">
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white">
+            <th>
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                     <button type="button" class="btn btn-light btn-sm" id="prev-week-btn"><span class="ui-icon ui-icon-caret-1-w"></span></button>
                     <button type="button" class="btn btn-light btn-sm" id="week-btn"></button>
                     <button type="button" class="btn btn-light btn-sm" id="next-week-btn"><span class="ui-icon ui-icon-caret-1-e"></span></button>
                 </div>
             </th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white"></th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white"></th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white"></th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white"></th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white"></th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white"></th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white"></th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white"></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
 
         </tr>
-        <tr>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 10px"><span class="badge badge-pill badge-danger">Emporium Melbourne</span></th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 10px">Monday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 10px">Tuesday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 10px">Wednesday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 10px">Thursday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 10px">Friday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 10px">Saturday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 10px">Sunday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 10px">Hours</th>                    
-        </tr>
-
-        {% for staff in staff_list %}
-        <tr>
-          {% if staff.sposition == 1 %}
-              <td style="background: transparent; color: white; text-align: left; border-color: transparent;" data-sid="{{ staff.sid }}"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
-          {% else %}
-              <td style="background: transparent; color: white; text-align: left; border-color: transparent;" data-sid="{{ staff.sid }}"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
-          {% endif %}
-
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(110, 110, 110, 0.3); color: white;">0.0</td>
-        </tr>
-        {% endfor %}
-
-        <!--
-        <tr>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 30px"><span class="badge badge-pill badge-danger">Westfield Doncaster</span></th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 30px">Monday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 30px">Tuesday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 30px">Wednesday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 30px">Thursday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 30px">Friday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 30px">Saturday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 30px">Sunday</th>
-            <th style="background: rgb(52, 58, 64); border-color: rgb(52, 58, 64); color: white; padding-top: 30px">Hours</th>                    
+        <tr id="week-days">
+            <th><span class="badge badge-pill badge-danger">Emporium Melbourne</span></th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+            <th>Sunday</th>
+            <th>Hours</th>                    
         </tr>
 
         {% for staff in staff_list %}
         <tr>
           {% if staff.sposition == 1 %}
-              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
+              <td class="staff-cell" data-sid="{{ staff.sid }}"><a href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
           {% else %}
-              <td style="background: transparent; color: white; text-align: left; border-color: transparent;"><a style="color: white" href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
+              <td class="staff-cell" data-sid="{{ staff.sid }}"><a href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
           {% endif %}
 
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(255, 255, 255, 0.2); color: white;">x</td>
-          <td style="background: rgba(110, 110, 110, 0.3); color: white;">0.0</td>
-          {# <td style="background: rgb(0, 123, 255); color: white;">0.0</td> #}
+          <td class="roster-cell">x</td>
+          <td class="roster-cell">x</td>
+          <td class="roster-cell">x</td>
+          <td class="roster-cell">x</td>
+          <td class="roster-cell">x</td>
+          <td class="roster-cell">x</td>
+          <td class="roster-cell">x</td>
+          <td class="hours-cell">0.0</td>
         </tr>
         {% endfor %}
-        -->
-
-
 
       </table>
 
