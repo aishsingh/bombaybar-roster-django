@@ -12,14 +12,24 @@ function calcStaffHours() {
         $(this).find('td').each(function () {
             if ($(this).attr('class') == 'staff-cell')
                 sid = $(this).data('sid');
-            else if ($(this).attr('class') == 'hours-cell')
-                $(this).html(hours);
+            else if ($(this).attr('class') == 'hours-cell') {
+                if (hours == 0) {
+                    $(this).css("color", "rgb(110, 110, 110)");
+                    $(this).html("-");
+                }
+                else {
+                    $(this).html(hours.toFixed(1));
+                }
+            }
             else {
-                if ($(this).html() != 'x') {
+                if ($(this).html() != '&nbsp;' && $(this).html() != 'x') {
                     var val = $(this).html().split(' - ');
                     var starttime = moment(val[0], 'HH:mm');
                     var endtime = moment(val[1], 'HH:mm');
-                    hours += endtime.diff(starttime, 'hours', true);
+                    var lunch_break = 0;  // hours
+                    if (starttime.isBefore(moment('14:00', 'HH:mm'))) lunch_break = 0.5;
+
+                    hours += endtime.diff(starttime, 'hours', true) - lunch_break;
                 }
             }
         });
@@ -61,7 +71,7 @@ function calcWeekDates() {
         var elements = $("#roster-table td, #roster-table th");
         var target_index = elements.index() + 1 + day_of_week;
 
-        elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(255, 255, 255, 0.7)");
+        elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(255, 255, 255, 0.8)");
         // elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(0, 123, 255, 0.7)");
         // elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(220, 53, 69, 0.5)");
         elements.filter(":nth-child(" + target_index + ")").css("color", "black");
@@ -88,7 +98,7 @@ function prepareExportData() {
     roster_instance = $("table").tableExport({
             headers: true,                              // (Boolean), display table headers (th or td elements) in the <thead>, (default: true)
             footers: true,                              // (Boolean), display table footers (th or td elements) in the <tfoot>, (default: false)
-            formats: ['xls', 'csv', 'xlsx'],            // (String[]), filetype(s) for the export, (default: ['xls', 'csv', 'txt'])
+            formats: ['xls', 'csv'],            // (String[]), filetype(s) for the export, (default: ['xls', 'csv', 'txt'])
             filename: 'id',                             // (id, String), filename for the downloaded file, (default: 'id')
             exportButtons: false,                       // (Boolean), automatically generate the built-in export buttons for each of the specified formats (default: true)
             ignoreRows: null,                           // (Number, Number[]), row indices to exclude from the exported file(s) (default: null)
@@ -104,10 +114,6 @@ function prepareExportData() {
     $('#export-csv-btn').off('click').on('click', function() {
         var exportData = roster_instance.getExportData()['roster-table']['csv'];
         roster_instance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
-    });
-    $('#export-pdf-btn').off('click').on('click', function() { //TODO
-        // var exportData = roster_instance.getExportData()['roster-table']['pdf'];
-        // roster_instance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
     });
 }
 
@@ -175,7 +181,7 @@ $(document).ready(function()
 
         if (!week_offset) {
             var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
-            cell.css("background-color", "rgba(255, 255, 255, 0.8)");
+            cell.css("background-color", "rgba(255, 255, 255, 0.9)");
             cell.css("color", "black");
         }
     });
@@ -186,7 +192,7 @@ $(document).ready(function()
 
         if (!week_offset) {
             var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
-            cell.css("background-color", "rgba(255, 255, 255, 0.7)");
+            cell.css("background-color", "rgba(255, 255, 255, 0.8)");
             cell.css("color", "black");
         }
     });

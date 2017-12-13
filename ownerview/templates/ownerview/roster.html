@@ -68,7 +68,6 @@
                 <div class="dropdown-menu" aria-labelledby="export-groupdropdown">
                     <button type="button" class="dropdown-item" id="export-xls-btn">Export to XLS</button>
                     <button type="button" class="dropdown-item" id="export-csv-btn">Export to CSV</button>
-                    <button type="button" class="dropdown-item" id="export-pdf-btn"><strike>Export to PDF</strike></button>
                 </div>
             </div>
         </div>
@@ -119,14 +118,14 @@
               <td class="staff-cell" data-sid="{{ staff.sid }}"><a href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
           {% endif %}
 
-          <td class="roster-cell">x</td>
-          <td class="roster-cell">x</td>
-          <td class="roster-cell">x</td>
-          <td class="roster-cell">x</td>
-          <td class="roster-cell">x</td>
-          <td class="roster-cell">x</td>
-          <td class="roster-cell">x</td>
-          <td class="hours-cell">0.0</td>
+          <td class="roster-cell">&nbsp;</td>
+          <td class="roster-cell">&nbsp;</td>
+          <td class="roster-cell">&nbsp;</td>
+          <td class="roster-cell">&nbsp;</td>
+          <td class="roster-cell">&nbsp;</td>
+          <td class="roster-cell">&nbsp;</td>
+          <td class="roster-cell">&nbsp;</td>
+          <td class="hours-cell"></td>
         </tr>
         {% endfor %}
 

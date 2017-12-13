@@ -41,7 +41,7 @@ body {
 .roster-cell {
     background: rgba(255, 255, 255, 0.2);
     /* border-color: rgb(52, 58, 64); */
-    color: white;
+    color: rgb(225, 225, 225);
 }
 .hours-cell {
     background: rgba(110, 110, 110, 0.3);
