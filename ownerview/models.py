@@ -40,6 +40,7 @@ class Event(models.Model):
 class History(models.Model):
     hid = models.AutoField(primary_key=True)
     hdate = models.DateField()
+    htype = models.IntegerField()
     hstarttime = models.TimeField(blank=True, null=True)
     hendtime = models.TimeField(blank=True, null=True)
     hnote = models.CharField(max_length=10, blank=True, null=True)
