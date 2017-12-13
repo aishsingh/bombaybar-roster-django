@@ -1,6 +1,7 @@
 var week_offset;
 var day_of_week;
 var edit_mode;
+var cell_selected;
 var roster_instance;
 var roster_data_received;
 
@@ -131,6 +132,7 @@ $(document).ready(function()
     week_offset = 0;
     day_of_week = moment().day();
     edit_mode = false;
+    cell_selected = null;
     roster_instance = null;
     roster_data_recieved = false;
 
@@ -250,6 +252,10 @@ $(document).ready(function()
             edit_mode = true;
         }
         else {
+            if (cell_selected != null) {
+                cell_selected.html(cell_selected.find("input").val());
+            }
+
             $("#edit-btn").removeClass( "btn-danger" ).addClass( "btn-primary" ).html("Edit");
             $("#save-btn").hide();
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "solid");
@@ -257,6 +263,24 @@ $(document).ready(function()
             edit_mode = false;
         }
     });
+
+    // $('#roster-cell').click(function(event) {
+    $(document).on('click', '.roster-cell', function(event) {
+        if (edit_mode) {
+            if (cell_selected != null) {
+                if ($(this).is(cell_selected))
+                    return;
+                else
+                    cell_selected.html(cell_selected.find("input").val());
+            }
+
+            var data = $(this).html();
+            $(this).html("<input type='text' value='" + data + "'>");
+            $(this).find("input").focus();
+            cell_selected = $(this);
+        }
+    });
+
     $(document).on('click', '#week-btn', function(event) {
         $("#week-picker").datepicker("show");
     });
