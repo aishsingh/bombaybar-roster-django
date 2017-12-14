@@ -31,11 +31,19 @@ def index(request):
 
 
 @login_required
-def get_weekly_roster(request):
+def get_roster(request):
     weekly_roster = Roster.objects.order_by('staff__sname')
     serialized = serialize('json', weekly_roster, cls=LazyEncoder)
     return HttpResponse(serialized, content_type="application/javascript")
 
+@login_required
+def get_weekly_history(request, startdate, enddate):
+    start_date = datetime.datetime.strptime(startdate, "%Y-%m-%d")
+    end_date = datetime.datetime.strptime(enddate, "%Y-%m-%d")
+
+    weekly_history = History.objects.filter(hdate__range=(start_date, end_date)).order_by('staff__sname')
+    serialized = serialize('json', weekly_history, cls=LazyEncoder)
+    return HttpResponse(serialized, content_type="application/javascript")
 
 @login_required
 def roster(request):

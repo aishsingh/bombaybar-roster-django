@@ -93,6 +93,27 @@ function calcWeekDates() {
     }
 
     if (roster_data_received) prepareExportData();
+
+    var start_date = moment().add(week_offset, 'weeks').startOf('isoWeek')
+    var end_sate = startdate.endOf('isoWeek')
+    // Fetch Weekly History
+    $.ajax({
+            url: '/getweeklyhistory/' + start_date.format('YYYY-MM-DD') + '/' + end_date.format('YYYY-MM-DD'),
+            type: 'GET',
+            success: function(data) {
+                var roster = JSON.parse(data);
+
+                for (var i = 0; i < roster.length; i++) {
+                    var rowid = $("#roster-table td[data-sid='" + roster[i].fields.staff +"']").closest('tr').index();
+                    $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster[i].fields.rday + ")").html(roster[i].fields.rstarttime + " - " + roster[i].fields.rendtime);
+                }
+
+                allDataReceived();
+            },
+            failure: function(data) { 
+                alert('Error fetching history data');
+            }
+    }); 
 }
 
 function prepareExportData() {
@@ -136,11 +157,9 @@ $(document).ready(function()
     roster_instance = null;
     roster_data_recieved = false;
 
-    calcWeekDates();    
-
-    // Fetch Staff Rosters
+    // Fetch Weekly Roster
     $.ajax({
-            url: '/getweeklyroster',
+            url: '/getroster',
             type: 'GET',
             success: function(data) {
                 var roster = JSON.parse(data);
@@ -156,6 +175,8 @@ $(document).ready(function()
                 alert('Error fetching roster data');
             }
     }); 
+
+    calcWeekDates();    
 
     // Highlight only when mouseover first row
     $("table td:first-child").mouseover(function()
