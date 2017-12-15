@@ -123,8 +123,13 @@ function loadHistory() {
                             cell.html(times[0] + " - " + history[i].fields.hendtime);
                         }
                     }
-                    else
-                        $("#roster-table tr:eq(" + rowid + ") td:eq(" + hday + ")").html('x');
+                    else {
+                        cell.html('x');
+                    }
+
+                    // Tooltip
+                    if (history[i].fields.hnote)
+                        cell.tooltip({title: history[i].fields.hnote});
                 }
 
                 history_data_received = true;
