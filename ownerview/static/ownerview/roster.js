@@ -78,10 +78,19 @@ function calcWeekDates() {
         var target_index = elements.index() + 1 + day_of_week;
 
         elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(255, 255, 255, 0.8)");
-        // elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(0, 123, 255, 0.7)");
-        // elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(220, 53, 69, 0.5)");
         elements.filter(":nth-child(" + target_index + ")").css("color", "black");
         // elements.filter(":nth-child(" + target_index + ")").css("border", "none");
+
+        // Hightlight the future
+        elements = $("#roster-table td");
+        for (var i = target_index+1; i < (elements.index()+2+7); i++) {
+            elements.filter(":nth-child(" + i + ")").css("background-color", "rgba(200, 200, 200, 0.1)");
+            elements.filter(":nth-child(" + i + ")").css("color", "rgb(200, 200, 200)");
+        }
+    } // Hightlight the future
+    else if (week_offset > 0) {
+        elements = $("#roster-table .roster-cell").css("background-color", "rgba(200, 200, 200, 0.1)");
+        elements = $("#roster-table .roster-cell").css("color", "rgb(200, 200, 200)");
     }
 }
 

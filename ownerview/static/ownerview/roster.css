@@ -39,14 +39,12 @@ body {
     color: white;
 }
 .verified-history-cell {
-    background: rgba(255, 255, 255, 0.2);
-    /* border-color: rgb(52, 58, 64); */
-    color: rgb(240, 240, 240);
+    background: rgba(255, 255, 255, 0.5);
+    color: rgb(0, 0, 0);
 }
 .roster-cell {
-    background: rgba(255, 255, 255, 0.2);
-    /* border-color: rgb(52, 58, 64); */
-    color: rgb(180, 180, 180);
+    background: rgba(255, 255, 255, 0.5);
+    color: rgb(70, 70, 70);
 }
 .roster-cell input {
     width: 50%;
