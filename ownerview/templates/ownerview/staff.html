@@ -3,33 +3,21 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Staff | Bombay Bar Management</title>
+    <title>Manage Roster</title>
 
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'ownerview/bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'ownerview/jquery/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'ownerview/jquery-ui/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'ownerview/moment/moment.min.js' %}"></script>
+    <script src="{% static 'ownerview/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    {# <script src="{% static 'ownerview/roster.js' %}"></script> #}
 
-    <style>
-      body {
-          background: rgb(52, 58, 64);
-      }
-      table {
-        table-layout: fixed;
-        width: 100%;
-        background: white;
-      }
-      table, th, td {
-        border: 1px solid rgb(52, 58, 64);
-        border-collapse: collapse;
-      }
-      th, td {
-        padding: 5px 2px 2px 5px;
-        text-align: center;
-      }
-    </style>
+    <link rel="stylesheet" href="{% static 'ownerview/jquery-ui/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'ownerview/bootstrap/css/bootstrap.min.css' %}">
+    {# <link rel="stylesheet" href="{% static 'ownerview/roster.css' %}"> #}
+
   </head>
   <body>
 
@@ -44,14 +32,14 @@
                   <li class="nav-item">
                       <a class="nav-link" href="{% url 'ownerview:index' %}">Overview</a>
                   </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{% url 'ownerview:roster' %}">Roster</a>
+                  <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'ownerview:roster' %}">Roster<span class="sr-only">(current)</span></a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link" href="#">Payment</a>
                   </li>
-                  <li class="nav-item active">
-                      <a class="nav-link" href="{% url 'ownerview:staff' %}">Staff<span class="sr-only">(current)</span></a>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'ownerview:staff_list' %}">Staff</a>
                   </li>
               </ul>
               <span class="navbar-text">
@@ -61,17 +49,26 @@
       </nav>
 
 
-    {% if staff_list %}
 
-    <br/>
+    <div id="buttons-top-left" style="float: left; margin-left: 8px; margin-top: 0px">
+        {# <button type="button" class="btn btn-secondary">Test</button> #}
+
+    </div>
+
+    <div id="buttons-top-right" style="float: right; margin-right: 8px; margin-top: 0px">
+        <button id="save-btn" type="button" class="btn btn-success">Save</button>
+        <button id="edit-btn" type="button" class="btn btn-primary" disabled>Edit</button>
+    </div>
+
     <ul>
-        {% for staff in staff_list %}
-            <li><a href="/staff/{{ staff.id }}/">{{ staff.sname }}</a></li>
-        {% endfor %}
+        <li>ID: {{ staff.sid }}</li>
+        <li>Name: {{ staff.sname }}</li>
+        <li>Payrate: ${{ staff.spayrate }}</li>
+        <li>Fixed Payrate: {{ staff.spayfixed }}</li>
+        <li>Position: {{ staff.sposition }}</li>
+        <li>Notes: "{{ staff.snote }}"</li>
     </ul>
-    
-    {% else %}
-        <p>No staff are available.</p>
-    {% endif %}
+
+
   </body>
 </html>

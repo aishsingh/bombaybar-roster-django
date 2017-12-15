@@ -20,7 +20,7 @@ function calcStaffHours() {
                     $(this).html("-");
                 }
                 else {
-                    $(this).html(hours.toFixed(1));
+                    $(this).html(hours + " h");
                 }
             }
             else {
@@ -70,7 +70,8 @@ function calcWeekDates() {
 
     // Reset table styles
     $(".verified-history-cell").removeClass("verified-history-cell").addClass("roster-cell");
-    $("#roster-table td, #roster-table th").removeAttr('style');
+    $("#roster-table td, #roster-table th").removeAttr('style').removeAttr('data-original-title').removeAttr('title');
+    $("#roster-table td").tooltip('dispose');
 
     // Highlight current day column
     if (!week_offset) {
@@ -227,11 +228,11 @@ $(document).ready(function()
         target_index = $(this).closest("tr").index() + 1;
         elements = $("tr");
         // elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(220, 53, 69, 1)");
-        elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(0, 123, 255, 1)");
+        elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(23, 162, 184, 1)");
 
         if (!week_offset) {
             var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
-            cell.css("background-color", "rgba(0, 123, 255, 1)");
+            cell.css("background-color", "rgba(23, 162, 184, 1)");
             cell.css("color", "white");
         }
     });

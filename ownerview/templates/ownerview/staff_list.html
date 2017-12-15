@@ -12,14 +12,11 @@
     <script src="{% static 'ownerview/jquery-ui/jquery-ui.min.js' %}"></script>
     <script src="{% static 'ownerview/moment/moment.min.js' %}"></script>
     <script src="{% static 'ownerview/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'ownerview/tableexport/xlsx.core.min.js' %}"></script>
-    <script src="{% static 'ownerview/tableexport/FileSaver.min.js' %}"></script>
-    <script src="{% static 'ownerview/tableexport/tableexport.min.js' %}"></script>
-    <script src="{% static 'ownerview/roster.js' %}"></script>
+    {# <script src="{% static 'ownerview/roster.js' %}"></script> #}
 
     <link rel="stylesheet" href="{% static 'ownerview/jquery-ui/jquery-ui.min.css' %}">
     <link rel="stylesheet" href="{% static 'ownerview/bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'ownerview/roster.css' %}">
+    {# <link rel="stylesheet" href="{% static 'ownerview/roster.css' %}"> #}
 
   </head>
   <body>
@@ -91,63 +88,18 @@
         <button id="edit-btn" type="button" class="btn btn-primary" disabled>Edit</button>
     </div>
 
-    <input type="hidden" id="week-picker"/>
-
     {% if staff_list %}
-    <table class="noselect" id="roster-table">
-        <tr id="week-dates">
-            <th>
-                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <button type="button" class="btn btn-light btn-sm" id="prev-week-btn"><span class="ui-icon ui-icon-caret-1-w"></span></button>
-                    <button type="button" class="btn btn-light btn-sm" id="week-btn"></button>
-                    <button type="button" class="btn btn-light btn-sm" id="next-week-btn"><span class="ui-icon ui-icon-caret-1-e"></span></button>
-                </div>
-            </th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
 
-        </tr>
-        <tr id="week-days">
-            <th><span class="badge badge-pill badge-info">Emporium Melbourne</span></th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-            <th>Saturday</th>
-            <th>Sunday</th>
-            <th>Hours</th>                    
-        </tr>
-
+    <br/>
+    <ul>
         {% for staff in staff_list %}
-        <tr>
-          {% if staff.sposition == 1 %}
-              <td class="staff-cell" data-sid="{{ staff.sid }}"><a href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
-          {% else %}
-              <td class="staff-cell" data-sid="{{ staff.sid }}"><a href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
-          {% endif %}
-
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="hours-cell"></td>
-        </tr>
+            <li><a href="/staff/{{ staff.sid }}/">{{ staff.sname }}</a></li>
         {% endfor %}
-
-      </table>
+    </ul>
 
     {% else %}
         <p>No staff are available.</p>
     {% endif %}
+
   </body>
 </html>

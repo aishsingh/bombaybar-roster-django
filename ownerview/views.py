@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from datetime import date, datetime, time, timedelta
@@ -53,7 +53,13 @@ def roster(request):
     return render(request, 'ownerview/roster.html', context)
 
 @login_required
-def staff(request):
+def staff(request, staff_id):
+    staff = get_object_or_404(Staff, pk=staff_id)
+    context = {'staff': staff}
+    return render(request, 'ownerview/staff.html', context)
+
+@login_required
+def staff_list(request):
     staff_list = Staff.objects.order_by('sname')
     context = {'staff_list': staff_list}
-    return render(request, 'ownerview/staff.html', context)
+    return render(request, 'ownerview/staff_list.html', context)

@@ -6,6 +6,7 @@ body {
     width: 100%;
     min-width: 900px;
     background: transparent;
+    margin-top: 60px;
 }
 /*
     table td:first-child {
@@ -39,12 +40,12 @@ body {
     color: white;
 }
 .verified-history-cell {
-    background: rgba(255, 255, 255, 0.5);
-    color: rgb(0, 0, 0);
+    background: rgba(255, 255, 255, 0.7);
+    color: rgb(200, 50, 50);
 }
 .roster-cell {
-    background: rgba(255, 255, 255, 0.5);
-    color: rgb(70, 70, 70);
+    background: rgba(255, 255, 255, 0.7);
+    color: rgb(40, 40, 40);
 }
 .roster-cell input {
     width: 50%;

@@ -51,7 +51,7 @@
                       <a class="nav-link" href="#">Payment</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="{% url 'ownerview:staff' %}">Staff</a>
+                      <a class="nav-link" href="{% url 'ownerview:staff_list' %}">Staff</a>
                   </li>
               </ul>
               <span class="navbar-text">
@@ -66,7 +66,7 @@
     <br/>
     <ul>
         {% for staff in staff_list %}
-            <li><a href="/staff/{{ staff.id }}/">{{ staff.sname }}</a></li>
+            <li><a href="/staff/{{ staff.sid }}/">{{ staff.sname }}</a></li>
         {% endfor %}
     </ul>
     
