@@ -319,13 +319,27 @@ $(document).ready(function()
             if (cell_selected != null) {
                 if ($(this).is(cell_selected))
                     return;
-                else
-                    cell_selected.html(cell_selected.find("input").val());
+                else {
+                    var times = cell_selected.find("input");
+                    var start = times.first().val().replace(/\s/g, '');
+                    var end = times.last().val().replace(/\s/g, '');
+
+                    if (start && end)
+                        cell_selected.html(start + " - " + end);
+                    else
+                        cell_selected.html("&nbsp;");
+                }
             }
 
             var data = $(this).html();
-            $(this).html("<input type='text' value='" + data + "'>");
-            $(this).find("input").focus();
+            if (data && data != "&nbsp;" && data != 'x') {
+                var times = data.split(' - ');
+                $(this).html("<input type='text' value='" + times[0] + "'><input type='text' value='" + times[1] + "'>");
+            }
+            else {
+                $(this).html("<input type='text' value=''><input type='text' value=''>");
+            }
+            $(this).find("input").first().focus();
             cell_selected = $(this);
         }
     });

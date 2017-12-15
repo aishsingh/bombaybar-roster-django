@@ -46,7 +46,7 @@ body {
     margin: 0;
 }
 .roster-cell input {
-    width: 100%;
+    width: 50%;
     text-align: center;
     border: 0;
     padding: 0;
