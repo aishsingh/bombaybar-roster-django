@@ -68,6 +68,10 @@ function calcWeekDates() {
         day.add(1, 'days');
     }
 
+    // Reset table styles
+    $(".verified-history-cell").removeClass("verified-history-cell").addClass("roster-cell");
+    $("#roster-table td, #roster-table th").removeAttr('style');
+
     // Highlight current day column
     if (!week_offset) {
         var elements = $("#roster-table td, #roster-table th");
@@ -79,22 +83,9 @@ function calcWeekDates() {
         elements.filter(":nth-child(" + target_index + ")").css("color", "black");
         // elements.filter(":nth-child(" + target_index + ")").css("border", "none");
     }
-    else {
-        var elements = $("#roster-table th");
-        for (var i=2; i<=8; i++) {
-            elements.filter(":nth-child(" + i + ")").css("background-color", "rgb(52, 58, 64)");
-            elements.filter(":nth-child(" + i + ")").css("color", "white");
-        }
-
-        elements = $("#roster-table td");
-        for (var i=2; i<=8; i++) {
-            elements.filter(":nth-child(" + i + ")").css("background-color", "rgba(255, 255, 255, 0.2)");
-            elements.filter(":nth-child(" + i + ")").css("color", "white");
-        }
-    }
 }
 
-function loadHistory() {
+function fetchHistory() {
     // Fetch Weekly History
     var start_date = moment().add(week_offset, 'weeks').startOf('isoWeek')
     var end_date = start_date.clone().endOf('isoWeek')
@@ -127,6 +118,9 @@ function loadHistory() {
                         cell.html('x');
                     }
 
+                    // Differentiate from the normal roster
+                    cell.removeClass("roster-cell").addClass("verified-history-cell");
+
                     // Tooltip
                     if (history[i].fields.hnote)
                         cell.tooltip({title: history[i].fields.hnote});
@@ -139,6 +133,20 @@ function loadHistory() {
                 alert('Error fetching history data');
             }
     }); 
+}
+
+function displayRoster(roster) {
+    $("#loc-groupdropdown").prop('disabled', true);
+    $("#export-groupdropdown").prop('disabled', true);
+    $("#edit-btn").prop('disabled', true);
+
+    for (var i = 0; i < roster.length; i++) {
+        var rowid = $("#roster-table td[data-sid='" + roster[i].fields.staff +"']").closest('tr').index();
+        $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster[i].fields.rday + ")").html(roster[i].fields.rstarttime + " - " + roster[i].fields.rendtime);
+    }
+
+    history_data_received = false;
+    fetchHistory();
 }
 
 function prepareExportData() {
@@ -166,6 +174,7 @@ function prepareExportData() {
 
 function checkAllDataReceived() {
     if (roster_data_received && history_data_received) {
+        $("#loc-groupdropdown").prop('disabled', false);
         $("#export-groupdropdown").prop('disabled', false);
         $("#edit-btn").prop('disabled', false);
 
@@ -184,20 +193,16 @@ $(document).ready(function()
     roster_data_recieved = false;
     history_data_recieved = false;
 
+    var roster_data = null;
+
     // Fetch Weekly Roster
     $.ajax({
             url: '/getroster',
             type: 'GET',
             success: function(data) {
-                var roster = JSON.parse(data);
-
-                for (var i = 0; i < roster.length; i++) {
-                    var rowid = $("#roster-table td[data-sid='" + roster[i].fields.staff +"']").closest('tr').index();
-                    $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster[i].fields.rday + ")").html(roster[i].fields.rstarttime + " - " + roster[i].fields.rendtime);
-                }
-
+                roster_data = JSON.parse(data);
                 roster_data_received = true;
-                loadHistory();
+                displayRoster(roster_data);
             },
             failure: function(data) { 
                 alert('Error fetching roster data');
@@ -350,14 +355,17 @@ $(document).ready(function()
     $(document).on('click', '#return-week-btn', function(event) {
         week_offset = 0;
         calcWeekDates();
+        displayRoster(roster_data);
     });
     $(document).on('click', '#prev-week-btn', function(event) {
         week_offset--;
         calcWeekDates();
+        displayRoster(roster_data);
     });
     $(document).on('click', '#next-week-btn', function(event) {
         week_offset++;
         calcWeekDates();
+        displayRoster(roster_data);
     });
 
     // FIX to remove bootstrap button focus

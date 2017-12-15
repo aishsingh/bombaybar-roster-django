@@ -55,9 +55,24 @@
 
     <div id="buttons-top-left" style="float: left; margin-left: 8px; margin-top: 0px">
         {# <button type="button" class="btn btn-secondary">Test</button> #}
+
     </div>
 
     <div id="buttons-top-right" style="float: right; margin-right: 8px; margin-top: 0px">
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            {# <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true" autocomplete="off">Sort Location</button> #}
+
+            <div class="btn-group" role="group">
+                <button id="loc-groupdropdown" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                    All Locations
+                </button>
+                <div class="dropdown-menu" aria-labelledby="loc-groupdropdown">
+                    <button type="button" class="dropdown-item" id="loc-emporium-btn">Emporium Melbourne</button>
+                    <button type="button" class="dropdown-item" id="loc-westfield-btn">Westfield Doncaster</button>
+                </div>
+            </div>
+        </div>
+
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             {# <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true" autocomplete="off">Sort Location</button> #}
 

@@ -38,19 +38,20 @@ body {
 .staff-cell a {
     color: white;
 }
+.verified-history-cell {
+    background: rgba(255, 255, 255, 0.2);
+    /* border-color: rgb(52, 58, 64); */
+    color: rgb(240, 240, 240);
+}
 .roster-cell {
     background: rgba(255, 255, 255, 0.2);
     /* border-color: rgb(52, 58, 64); */
-    color: rgb(225, 225, 225);
-    padding: 0;
-    margin: 0;
+    color: rgb(180, 180, 180);
 }
 .roster-cell input {
     width: 50%;
     text-align: center;
     border: 0;
-    padding: 0;
-    margin: 0;
 }
 .roster-cell input:focus {
     outline: none;
