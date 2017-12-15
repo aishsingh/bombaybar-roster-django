@@ -4,6 +4,7 @@ var edit_mode;
 var cell_selected;
 var roster_instance;
 var roster_data_received;
+var history_data_received;
 
 function calcStaffHours() {
     $('#roster-table tr:gt(1)').each(function () {
@@ -91,24 +92,43 @@ function calcWeekDates() {
             elements.filter(":nth-child(" + i + ")").css("color", "white");
         }
     }
+}
 
-    if (roster_data_received) prepareExportData();
-
-    var start_date = moment().add(week_offset, 'weeks').startOf('isoWeek')
-    var end_sate = startdate.endOf('isoWeek')
+function loadHistory() {
     // Fetch Weekly History
+    var start_date = moment().add(week_offset, 'weeks').startOf('isoWeek')
+    var end_date = start_date.clone().endOf('isoWeek')
     $.ajax({
             url: '/getweeklyhistory/' + start_date.format('YYYY-MM-DD') + '/' + end_date.format('YYYY-MM-DD'),
             type: 'GET',
             success: function(data) {
-                var roster = JSON.parse(data);
+                var history = JSON.parse(data);
 
-                for (var i = 0; i < roster.length; i++) {
-                    var rowid = $("#roster-table td[data-sid='" + roster[i].fields.staff +"']").closest('tr').index();
-                    $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster[i].fields.rday + ")").html(roster[i].fields.rstarttime + " - " + roster[i].fields.rendtime);
+                for (var i = 0; i < history.length; i++) {
+                    var rowid = $("#roster-table td[data-sid='" + history[i].fields.staff +"']").closest('tr').index();
+                    var hday = moment(history[i].fields.hdate).isoWeekday();
+                    var cell = $("#roster-table tr:eq(" + rowid + ") td:eq(" + hday + ")");
+                    if (history[i].fields.htype == 1) {
+                        var new_start = history[i].fields.hstarttime;
+                        var new_end = history[i].fields.hendtime;
+                        if (new_start && new_end) {
+                            cell.html(history[i].fields.hstarttime + " - " + history[i].fields.hendtime);
+                        }
+                        else if (new_start) {
+                            var times = cell.html().split(' - ');
+                            cell.html(history[i].fields.hstarttime + " - " + times[1]);
+                        }
+                        else {
+                            var times = cell.html().split(' - ');
+                            cell.html(times[0] + " - " + history[i].fields.hendtime);
+                        }
+                    }
+                    else
+                        $("#roster-table tr:eq(" + rowid + ") td:eq(" + hday + ")").html('x');
                 }
 
-                allDataReceived();
+                history_data_received = true;
+                checkAllDataReceived();
             },
             failure: function(data) { 
                 alert('Error fetching history data');
@@ -139,13 +159,14 @@ function prepareExportData() {
     });
 }
 
-function allDataReceived() {
-    roster_data_received = true;
-    $("#export-groupdropdown").prop('disabled', false);
-    $("#edit-btn").prop('disabled', false);
+function checkAllDataReceived() {
+    if (roster_data_received && history_data_received) {
+        $("#export-groupdropdown").prop('disabled', false);
+        $("#edit-btn").prop('disabled', false);
 
-    calcStaffHours();
-    prepareExportData();
+        calcStaffHours();
+        prepareExportData();
+    }
 }
 
 $(document).ready(function()
@@ -156,6 +177,7 @@ $(document).ready(function()
     cell_selected = null;
     roster_instance = null;
     roster_data_recieved = false;
+    history_data_recieved = false;
 
     // Fetch Weekly Roster
     $.ajax({
@@ -169,7 +191,8 @@ $(document).ready(function()
                     $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster[i].fields.rday + ")").html(roster[i].fields.rstarttime + " - " + roster[i].fields.rendtime);
                 }
 
-                allDataReceived();
+                roster_data_received = true;
+                loadHistory();
             },
             failure: function(data) { 
                 alert('Error fetching roster data');

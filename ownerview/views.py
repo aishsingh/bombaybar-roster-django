@@ -4,12 +4,12 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from datetime import date, time, timedelta
+from datetime import date, datetime, time, timedelta
 from django.utils.timezone import is_aware
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.serializers import serialize
 
-from .models import Staff, Roster
+from .models import Staff, Roster, History
 
 
 class LazyEncoder(DjangoJSONEncoder):
@@ -38,8 +38,8 @@ def get_roster(request):
 
 @login_required
 def get_weekly_history(request, startdate, enddate):
-    start_date = datetime.datetime.strptime(startdate, "%Y-%m-%d")
-    end_date = datetime.datetime.strptime(enddate, "%Y-%m-%d")
+    start_date = datetime.strptime(startdate, "%Y-%m-%d")
+    end_date = datetime.strptime(enddate, "%Y-%m-%d")
 
     weekly_history = History.objects.filter(hdate__range=(start_date, end_date)).order_by('staff__sname')
     serialized = serialize('json', weekly_history, cls=LazyEncoder)
