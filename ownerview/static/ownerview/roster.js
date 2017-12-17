@@ -196,7 +196,7 @@ function checkAllDataReceived() {
 $(document).ready(function()
 {
     week_offset = 0;
-    day_of_week = moment().day();
+    day_of_week = moment().isoWeekday();
     edit_mode = false;
     cell_selected = null;
     roster_instance = null;
