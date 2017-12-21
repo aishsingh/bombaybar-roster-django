@@ -141,14 +141,18 @@ function enableAllButtons() {
 
 function disableButtonsForEditing() {
     $("#loc-groupdropdown").prop('disabled', true);
-    $("#export-groupdropdown").prop('disabled', true);
+    $("#export-groupdropdown").css('display', 'none');
+    $("#btns-top-left").css('display', 'inline');
+    $("#date-btn-group button").prop('disabled', true);
     $("#prev-week-btn").prop('disabled', true);
     $("#next-week-btn").prop('disabled', true);
     $("#return-week-btn").prop('disabled', true);
 }
 function enableButtonsForEditing() {
     $("#loc-groupdropdown").prop('disabled', false);
-    $("#export-groupdropdown").prop('disabled', false);
+    $("#export-groupdropdown").css('display', 'inline');
+    $("#btns-top-left").css('display', 'none');
+    $("#date-btn-group button").prop('disabled', false);
     $("#prev-week-btn").prop('disabled', false);
     $("#next-week-btn").prop('disabled', false);
     $("#return-week-btn").prop('disabled', false);
@@ -361,7 +365,14 @@ $(document).ready(function()
         else {
             if (cell_selected != null) {
                 var times = cell_selected.find("input");
-                cell_selected.html(times.first().val() + ' - ' + times.last().val());
+                var start = times.first().val().replace(/\s/g, '');
+                var end = times.last().val().replace(/\s/g, '');
+
+                if (start && end)
+                    cell_selected.html(start + " - " + end);
+                else
+                    cell_selected.html("&nbsp;");
+
                 cell_selected = null;
             }
 
@@ -378,7 +389,7 @@ $(document).ready(function()
         if (edit_mode) {
             if (cell_selected != null) {
                 if ($(this).is(cell_selected))
-                    return;
+                    return;  // Dont need to interpret already selected cell
                 else {
                     var times = cell_selected.find("input");
                     var start = times.first().val().replace(/\s/g, '');
@@ -389,6 +400,9 @@ $(document).ready(function()
                     else
                         cell_selected.html("&nbsp;");
                 }
+            }
+            else {
+                $("#date-btn-group button").prop('disabled', false);
             }
 
             var data = $(this).html();

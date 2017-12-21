@@ -53,12 +53,26 @@
 
 
 
-    <div id="buttons-top-left" style="float: left; margin-left: 8px; margin-top: 0px">
-        {# <button type="button" class="btn btn-secondary">Test</button> #}
+    <div id="btns-top-left" style="float: left; margin-left: 8px; margin-top: 0px">
+        <button type="button" class="btn btn-primary">Create Event</button>
+        <div id="date-btn-group" class="btn-group" role="group" aria-label="Basic example">
+            {# <button type="button" class="btn btn-primary" disabled>Change</button> #}
+            <div class="btn-group" role="group">
+                <button id="mark-date-groupdropdown" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                    Mark
+                </button>
+                <div class="dropdown-menu" aria-labelledby="mark-date-groupdropdown">
+                    <button type="button" class="dropdown-item">Opening Staff</button>
+                    <button type="button" class="dropdown-item">Closing Staff</button>
+                </div>
+            </div>
 
+            <button type="button" class="btn btn-primary" disabled>Reset</button>
+
+        </div>
     </div>
 
-    <div id="buttons-top-right" style="float: right; margin-right: 8px; margin-top: 0px">
+    <div id="btns-top-right" style="float: right; margin-right: 8px; margin-top: 0px">
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             {# <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true" autocomplete="off">Sort Location</button> #}
 
