@@ -5,8 +5,12 @@ body {
     table-layout: fixed;
     width: 100%;
     min-width: 900px;
-    background: transparent;
     margin-top: 60px;
+    background: transparent;
+    background-size: 100px 100px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center 58%;
 }
 /*
     table td:first-child {

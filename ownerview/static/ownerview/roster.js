@@ -95,7 +95,7 @@ function calcWeekDates() {
     }
 }
 
-function fetchHistory() {
+function fetchHistory(roster_data) {
     // Fetch Weekly History
     var start_date = moment().add(week_offset, 'weeks').startOf('isoWeek')
     var end_date = start_date.clone().endOf('isoWeek')
@@ -103,41 +103,16 @@ function fetchHistory() {
             url: '/getweeklyhistory/' + start_date.format('YYYY-MM-DD') + '/' + end_date.format('YYYY-MM-DD'),
             type: 'GET',
             success: function(data) {
-                var history = JSON.parse(data);
+                var history_data = JSON.parse(data);
 
-                for (var i = 0; i < history.length; i++) {
-                    var rowid = $("#roster-table td[data-sid='" + history[i].fields.staff +"']").closest('tr').index();
-                    var hday = moment(history[i].fields.hdate).isoWeekday();
-                    var cell = $("#roster-table tr:eq(" + rowid + ") td:eq(" + hday + ")");
-                    if (history[i].fields.htype == 1) {
-                        var new_start = history[i].fields.hstarttime;
-                        var new_end = history[i].fields.hendtime;
-                        if (new_start && new_end) {
-                            cell.html(history[i].fields.hstarttime + " - " + history[i].fields.hendtime);
-                        }
-                        else if (new_start) {
-                            var times = cell.html().split(' - ');
-                            cell.html(history[i].fields.hstarttime + " - " + times[1]);
-                        }
-                        else {
-                            var times = cell.html().split(' - ');
-                            cell.html(times[0] + " - " + history[i].fields.hendtime);
-                        }
-                    }
-                    else {
-                        cell.html('x');
-                    }
-
-                    // Differentiate from the normal roster
-                    cell.removeClass("roster-cell").addClass("verified-history-cell");
-
-                    // Tooltip
-                    if (history[i].fields.hnote)
-                        cell.tooltip({title: history[i].fields.hnote});
-                }
+                // Display roster before history
+                displayRoster(roster_data);
+                displayHistory(history_data);
 
                 history_data_received = true;
                 checkAllDataReceived();
+                $("#roster-table").css("background-image", "none");
+                $("#roster-table td:not(:first-child)").css("opacity", "1").css("border-color", "rgb(52, 58, 64)");
             },
             failure: function(data) { 
                 alert('Error fetching history data');
@@ -145,22 +120,58 @@ function fetchHistory() {
     }); 
 }
 
-function displayRoster(roster) {
+function reloadRosterTable(roster_data) {
     $("#loc-groupdropdown").prop('disabled', true);
     $("#export-groupdropdown").prop('disabled', true);
     $("#edit-btn").prop('disabled', true);
-
-    for (var i = 0; i < roster.length; i++) {
-        var rowid = $("#roster-table td[data-sid='" + roster[i].fields.staff +"']").closest('tr').index();
-        $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster[i].fields.rday + ")").html(roster[i].fields.rstarttime + " - " + roster[i].fields.rendtime);
-    }
+    $("#roster-table").css("background-image", "url(/static/ownerview/images/loading.gif)");
+    $("#roster-table td:not(:first-child)").css("opacity", "0.5").css("border-color", "transparent");
 
     history_data_received = false;
-    fetchHistory();
+    fetchHistory(roster_data);
+}
+
+function displayRoster(roster_data) {
+    for (var i = 0; i < roster_data.length; i++) {
+        var rowid = $("#roster-table td[data-sid='" + roster_data[i].fields.staff +"']").closest('tr').index();
+        $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster_data[i].fields.rday + ")").html(roster_data[i].fields.rstarttime + " - " + roster_data[i].fields.rendtime);
+    }
+}
+function displayHistory(history_data) {
+    for (var i = 0; i < history_data.length; i++) {
+        var rowid = $("#roster-table td[data-sid='" + history_data[i].fields.staff +"']").closest('tr').index();
+        var hday = moment(history_data[i].fields.hdate).isoWeekday();
+        var cell = $("#roster-table tr:eq(" + rowid + ") td:eq(" + hday + ")");
+        if (history_data[i].fields.htype == 1) {
+            var new_start = history_data[i].fields.hstarttime;
+            var new_end = history_data[i].fields.hendtime;
+            if (new_start && new_end) {
+                cell.html(history_data[i].fields.hstarttime + " - " + history_data[i].fields.hendtime);
+            }
+            else if (new_start) {
+                var times = cell.html().split(' - ');
+                cell.html(history_data[i].fields.hstarttime + " - " + times[1]);
+            }
+            else {
+                var times = cell.html().split(' - ');
+                cell.html(times[0] + " - " + history_data[i].fields.hendtime);
+            }
+        }
+        else {
+            cell.html('x');
+        }
+
+        // Differentiate from the normal roster
+        cell.removeClass("roster-cell").addClass("verified-history-cell");
+
+        // Tooltip
+        if (history_data[i].fields.hnote)
+            cell.tooltip({title: history_data[i].fields.hnote});
+    }
 }
 
 function prepareExportData() {
-    roster_instance = $("table").tableExport({
+    roster_instance = $("#roster-table").tableExport({
             headers: true,                              // (Boolean), display table headers (th or td elements) in the <thead>, (default: true)
             footers: true,                              // (Boolean), display table footers (th or td elements) in the <tfoot>, (default: false)
             formats: ['xls', 'csv'],            // (String[]), filetype(s) for the export, (default: ['xls', 'csv', 'txt'])
@@ -212,7 +223,7 @@ $(document).ready(function()
             success: function(data) {
                 roster_data = JSON.parse(data);
                 roster_data_received = true;
-                displayRoster(roster_data);
+                reloadRosterTable(roster_data);
             },
             failure: function(data) { 
                 alert('Error fetching roster data');
@@ -222,7 +233,7 @@ $(document).ready(function()
     calcWeekDates();    
 
     // Highlight only when mouseover first row
-    $("table td:first-child").mouseover(function()
+    $("#roster-table td:first-child").mouseover(function()
     {
         var target_index, elements;
         target_index = $(this).closest("tr").index() + 1;
@@ -237,7 +248,7 @@ $(document).ready(function()
         }
     });
     // Highlight mouseover row
-    $("table td:not(:first-child)").mouseover(function()
+    $("#roster-table td:not(:first-child)").mouseover(function()
     {
         var target_index, elements;
         target_index = $(this).closest("tr").index() + 1;
@@ -252,7 +263,7 @@ $(document).ready(function()
         }
     });
     // Reset styles
-    $("table tr").mouseleave(function()
+    $("#roster-table tr").mouseleave(function()
     {
         $("tr").css("background-color", "transparent");
 
@@ -278,6 +289,7 @@ $(document).ready(function()
                 week_offset = week_a - moment().isoWeek();
 
                 calcWeekDates();
+                reloadRosterTable(roster_data);
                 selectCurrentWeek();
             },
             beforeShow: function() {
@@ -365,17 +377,17 @@ $(document).ready(function()
     $(document).on('click', '#return-week-btn', function(event) {
         week_offset = 0;
         calcWeekDates();
-        displayRoster(roster_data);
+        reloadRosterTable(roster_data);
     });
     $(document).on('click', '#prev-week-btn', function(event) {
         week_offset--;
         calcWeekDates();
-        displayRoster(roster_data);
+        reloadRosterTable(roster_data);
     });
     $(document).on('click', '#next-week-btn', function(event) {
         week_offset++;
         calcWeekDates();
-        displayRoster(roster_data);
+        reloadRosterTable(roster_data);
     });
 
     // FIX to remove bootstrap button focus
