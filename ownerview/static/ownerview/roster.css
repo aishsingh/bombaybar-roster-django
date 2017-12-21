@@ -22,6 +22,9 @@ body {
     padding: 5px 2px 2px 5px;
     text-align: center;
 }
+#week-dates button {
+    margin: 0px;
+}
 #week-dates th {
     /* font-size: 1.2em; */
     font-weight: normal;

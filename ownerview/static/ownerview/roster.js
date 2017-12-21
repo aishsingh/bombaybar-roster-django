@@ -120,10 +120,42 @@ function fetchHistory(roster_data) {
     }); 
 }
 
-function reloadRosterTable(roster_data) {
+function disableAllButtons() {
     $("#loc-groupdropdown").prop('disabled', true);
     $("#export-groupdropdown").prop('disabled', true);
     $("#edit-btn").prop('disabled', true);
+    $("#prev-week-btn").prop('disabled', true);
+    $("#next-week-btn").prop('disabled', true);
+    $("#return-week-btn").prop('disabled', true);
+    $("#week-btn").prop('disabled', true);
+}
+function enableAllButtons() {
+    $("#loc-groupdropdown").prop('disabled', false);
+    $("#export-groupdropdown").prop('disabled', false);
+    $("#edit-btn").prop('disabled', false);
+    $("#prev-week-btn").prop('disabled', false);
+    $("#next-week-btn").prop('disabled', false);
+    $("#return-week-btn").prop('disabled', false);
+    $("#week-btn").prop('disabled', false);
+}
+
+function disableButtonsForEditing() {
+    $("#loc-groupdropdown").prop('disabled', true);
+    $("#export-groupdropdown").prop('disabled', true);
+    $("#prev-week-btn").prop('disabled', true);
+    $("#next-week-btn").prop('disabled', true);
+    $("#return-week-btn").prop('disabled', true);
+}
+function enableButtonsForEditing() {
+    $("#loc-groupdropdown").prop('disabled', false);
+    $("#export-groupdropdown").prop('disabled', false);
+    $("#prev-week-btn").prop('disabled', false);
+    $("#next-week-btn").prop('disabled', false);
+    $("#return-week-btn").prop('disabled', false);
+}
+
+function reloadRosterTable(roster_data) {
+    disableAllButtons();
     $("#roster-table").css("background-image", "url(/static/ownerview/images/loading.gif)");
     $("#roster-table td:not(:first-child)").css("opacity", "0.5").css("border-color", "transparent");
 
@@ -195,9 +227,7 @@ function prepareExportData() {
 
 function checkAllDataReceived() {
     if (roster_data_received && history_data_received) {
-        $("#loc-groupdropdown").prop('disabled', false);
-        $("#export-groupdropdown").prop('disabled', false);
-        $("#edit-btn").prop('disabled', false);
+        enableAllButtons();
 
         calcStaffHours();
         prepareExportData();
@@ -326,6 +356,7 @@ $(document).ready(function()
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "dashed");
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "white");
             edit_mode = true;
+            disableButtonsForEditing();
         }
         else {
             if (cell_selected != null) {
@@ -339,10 +370,10 @@ $(document).ready(function()
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "solid");
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "rgb(52, 58, 64)");
             edit_mode = false;
+            enableButtonsForEditing();
         }
     });
 
-    // $('#roster-cell').click(function(event) {
     $(document).on('click', '.roster-cell', function(event) {
         if (edit_mode) {
             if (cell_selected != null) {
@@ -374,7 +405,8 @@ $(document).ready(function()
     });
 
     $(document).on('click', '#week-btn', function(event) {
-        $("#week-picker").datepicker("show");
+        if (!edit_mode)
+            $("#week-picker").datepicker("show");
     });
     $(document).on('click', '#return-week-btn', function(event) {
         week_offset = 0;
