@@ -329,7 +329,9 @@ $(document).ready(function()
         }
         else {
             if (cell_selected != null) {
-                cell_selected.html(cell_selected.find("input").val());
+                var times = cell_selected.find("input");
+                cell_selected.html(times.first().val() + ' - ' + times.last().val());
+                cell_selected = null;
             }
 
             $("#edit-btn").removeClass( "btn-danger" ).addClass( "btn-primary" ).html("Edit");
