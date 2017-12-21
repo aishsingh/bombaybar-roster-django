@@ -170,7 +170,10 @@ function reloadRosterTable(roster_data) {
 function displayRoster(roster_data) {
     for (var i = 0; i < roster_data.length; i++) {
         var rowid = $("#roster-table td[data-sid='" + roster_data[i].fields.staff +"']").closest('tr').index();
-        $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster_data[i].fields.rday + ")").html(roster_data[i].fields.rstarttime + " - " + roster_data[i].fields.rendtime);
+        var cell = $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster_data[i].fields.rday + ")");
+
+        cell.html(roster_data[i].fields.rstarttime + " - " + roster_data[i].fields.rendtime);
+        cell.data("pk", roster_data[i].pk);
     }
 }
 function displayHistory(history_data) {
@@ -199,6 +202,7 @@ function displayHistory(history_data) {
 
         // Differentiate from the normal roster
         cell.removeClass("roster-cell").addClass("verified-history-cell");
+        cell.data("pk", history_data[i].pk);
 
         // Tooltip
         if (history_data[i].fields.hnote)
