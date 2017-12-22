@@ -286,7 +286,7 @@ $(document).ready(function()
         // elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(220, 53, 69, 1)");
         elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(23, 162, 184, 1)");
 
-        if (!week_offset) {
+        if (!week_offset && !edit_mode) {
             var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
             cell.css("background-color", "rgba(23, 162, 184, 1)");
             cell.css("color", "white");
@@ -301,7 +301,7 @@ $(document).ready(function()
         // elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(220, 53, 69, 1)");
         elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(255, 255, 255, 0.1)");
 
-        if (!week_offset) {
+        if (!week_offset && !edit_mode) {
             var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
             cell.css("background-color", "rgba(255, 255, 255, 0.9)");
             cell.css("color", "black");
@@ -312,7 +312,7 @@ $(document).ready(function()
     {
         $("tr").css("background-color", "transparent");
 
-        if (!week_offset) {
+        if (!week_offset && !edit_mode) {
             var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
             cell.css("background-color", "rgba(255, 255, 255, 0.8)");
             cell.css("color", "black");
