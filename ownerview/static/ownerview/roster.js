@@ -383,14 +383,10 @@ $(document).ready(function()
         }
         else {
             if (cell_selected != null) {
-                var times = cell_selected.find("input");
-                var start = times.first().val().replace(/\s/g, '');
-                var end = times.last().val().replace(/\s/g, '');
-
-                if (start && end)
-                    cell_selected.html(start + " - " + end);
-                else
-                    cell_selected.html("&nbsp;");
+                $("[data-starttime][data-endtime]").each(function() {
+                    $(this).html($(this).attr('data-starttime') + " - " + $(this).attr('data-endtime'));
+                    $(this).removeAttr('data-starttime').removeAttr('data-endtime');
+                });
 
                 cell_selected = null;
             }
@@ -437,6 +433,12 @@ $(document).ready(function()
             var data = $(this).html();
             if (data && data != "&nbsp;" && data != 'x') {
                 var times = data.split(' - ');
+                $(this).attr('data-starttime', times[0]);
+                $(this).attr('data-endtime', times[1]);
+                $(this).attr('data-endtime', times[1]);
+                $(this).css("background-color", "rgba(66, 139, 202, 1.0)");
+                // $(this).css("color", "rgb(200, 50, 50)");
+
                 $(this).html("<input type='text' value='" + times[0] + "'><input type='text' value='" + times[1] + "'>");
             }
             else {
