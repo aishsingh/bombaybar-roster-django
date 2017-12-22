@@ -68,11 +68,16 @@ function calcWeekDates() {
         day.add(1, 'days');
     }
 
+
     // Reset table styles
     $(".verified-history-cell").removeClass("verified-history-cell").addClass("roster-cell");
     $("#roster-table td, #roster-table th").removeAttr('style').removeAttr('data-original-title').removeAttr('title');
     $("#roster-table td").tooltip('dispose');
 
+    styleRoster();
+}
+
+function styleRoster() {
     // Highlight current day column
     if (!week_offset) {
         var elements = $("#roster-table td, #roster-table th");
@@ -90,8 +95,10 @@ function calcWeekDates() {
         }
     } // Hightlight the future
     else if (week_offset > 0) {
-        elements = $("#roster-table .roster-cell").css("background-color", "rgba(200, 200, 200, 0.1)");
-        elements = $("#roster-table .roster-cell").css("color", "rgb(200, 200, 200)");
+        $("#roster-table .roster-cell").css("background-color", "rgba(200, 200, 200, 0.1)");
+        $("#roster-table .roster-cell").css("color", "rgb(200, 200, 200)");
+        // $("#roster-table .verified-history-cell").css("background-color", "rgba(200, 200, 200, 0.1)");
+        // $("#roster-table .verified-history-cell").css("color", "rgb(200, 200, 200)");
     }
 }
 
@@ -361,8 +368,16 @@ $(document).ready(function()
         if (!edit_mode) {
             $("#edit-btn").removeClass( "btn-primary" ).addClass( "btn-danger" ).html("Cancel");
             $("#save-btn").show();
+
+            // Style for edit mode
+            $("#roster-table .roster-cell").css("background-color", "rgba(100, 100, 100, 0.1)");
+            $("#roster-table .roster-cell").css("color", "white");
+            $("#roster-table .verified-history-cell").css("background-color", "rgba(100, 100, 100, 0.1)");
+            $("#roster-table .verified-history-cell").css("color", "white");
+
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "dashed");
-            $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "white");
+            $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "rgb(170, 170, 170)");
+
             edit_mode = true;
             disableButtonsForEditing();
         }
@@ -382,8 +397,18 @@ $(document).ready(function()
 
             $("#edit-btn").removeClass( "btn-danger" ).addClass( "btn-primary" ).html("Edit");
             $("#save-btn").hide();
+
+            // Revert default style
+            $("#roster-table .roster-cell").css("background-color", "rgba(255, 255, 255, 0.7)");
+            $("#roster-table .roster-cell").css("color", "rgb(40, 40, 40)");
+            $("#roster-table .verified-history-cell").css("background-color", "rgba(255, 255, 255, 0.7)");
+            $("#roster-table .verified-history-cell").css("color", "rgb(200, 50, 50)");
+
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "solid");
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "rgb(52, 58, 64)");
+
+            styleRoster();
+
             edit_mode = false;
             enableButtonsForEditing();
         }
