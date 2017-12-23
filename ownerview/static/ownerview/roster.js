@@ -40,9 +40,7 @@ function calcStaffHours() {
 }
 
 function calcWeekDates() {
-    moment.locale('en');
-
-    $("#week-btn").html("W" + (moment().add(week_offset, 'weeks').isoWeek()));
+    $("#week-btn").html("W" + (moment().add(week_offset, 'weeks').subtract(6, 'months').isoWeek()));
     if (!week_offset && $("#return-week-btn").length) {
         $("#return-week-btn").remove();
     }
@@ -260,6 +258,7 @@ $(document).ready(function()
     history_data_recieved = false;
 
     var roster_data = null;
+    moment.locale('en');
 
     // Fetch Weekly Roster
     $.ajax({
@@ -322,7 +321,7 @@ $(document).ready(function()
 
     //Initialize the jqueryui datepicker
     $("#week-picker").datepicker({
-            showWeek: true,
+            showWeek: false,
             showOtherMonths: true,
             showButtonPanel: false,
             selectOtherMonths: false,
