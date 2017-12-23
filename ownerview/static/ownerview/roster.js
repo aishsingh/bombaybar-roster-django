@@ -413,9 +413,10 @@ $(document).ready(function()
     $(document).on('click', '.roster-cell', function(event) {
         if (edit_mode) {
             if (cell_selected != null) {
-                if ($(this).is(cell_selected))
+                if ($(this).is(cell_selected)) 
                     return;  // Dont need to interpret already selected cell
                 else {
+                    // Remove prev selected inouts
                     var times = cell_selected.find("input");
                     var start = times.first().val().replace(/\s/g, '');
                     var end = times.last().val().replace(/\s/g, '');
@@ -430,24 +431,47 @@ $(document).ready(function()
                 $("#date-btn-group button").prop('disabled', false);
             }
 
-            var data = $(this).html();
-            if (data && data != "&nbsp;" && data != 'x') {
-                var times = data.split(' - ');
-                $(this).attr('data-starttime', times[0]);
-                $(this).attr('data-endtime', times[1]);
-                $(this).attr('data-endtime', times[1]);
-                $(this).css("background-color", "rgba(66, 139, 202, 1.0)");
-                // $(this).css("color", "rgb(200, 50, 50)");
+            if ($(this).html() && $(this).html() != "&nbsp;" && $(this).html() != 'x') {
+                var times = $(this).html().split(' - ');
+                if (!$(this).is("[data-starttime]") && !$(this).is("[data-endtime]")) {
+                    $(this).attr('data-starttime', times[0]);
+                    $(this).attr('data-endtime', times[1]);
+                }
 
-                $(this).html("<input type='text' value='" + times[0] + "'><input type='text' value='" + times[1] + "'>");
+                $(this).html("<input id='start-input' type='text' value='" + times[0] + "'><input id='end-input' type='text' value='" + times[1] + "'>");
             }
-            else {
-                $(this).html("<input type='text' value=''><input type='text' value=''>");
+            else { // Empty roster
+                if (!$(this).is("[data-starttime]") && !$(this).is("[data-endtime]")) {
+                    $(this).attr('data-starttime', '');
+                    $(this).attr('data-endtime', '');
+                }
+
+                $(this).html("<input id='start-input' type='text' value=''><input id='end-input' type='text' value=''>");
             }
             $(this).find("input").first().focus();
             cell_selected = $(this);
+
+
+            // Highlight on time change
+            $('#start-input').on('input', function() { 
+                if ($(this).parent().attr('data-starttime') !== $(this).val()) {
+                    $(this).parent().css("background-color", "rgba(66, 139, 202, 1.0)");
+                }
+                else if ($(this).parent().attr('data-endtime') === $(this).next().val()) {
+                    $(this).parent().css("background-color", "rgba(100, 100, 100, 0.1)");
+                }
+            });
+            $('#end-input').on('input', function() { 
+                if ($(this).parent().attr('data-endtime') !== $(this).val()) {
+                    $(this).parent().css("background-color", "rgba(66, 139, 202, 1.0)");
+                }
+                else if ($(this).parent().attr('data-starttime') === $(this).prev().val()) {
+                    $(this).parent().css("background-color", "rgba(100, 100, 100, 0.1)");
+                }
+            });
         }
     });
+
 
     $(document).on('click', '#week-btn', function(event) {
         if (!edit_mode)
