@@ -12,7 +12,7 @@
     <script src="{% static 'ownerview/jquery-ui/jquery-ui.min.js' %}"></script>
     <script src="{% static 'ownerview/moment/moment.min.js' %}"></script>
     <script src="{% static 'ownerview/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    {# <script src="{% static 'ownerview/roster.js' %}"></script> #}
+    <script src="{% static 'ownerview/staff.js' %}"></script>
 
     <link rel="stylesheet" href="{% static 'ownerview/jquery-ui/jquery-ui.min.css' %}">
     <link rel="stylesheet" href="{% static 'ownerview/bootstrap/css/bootstrap.min.css' %}">
@@ -52,7 +52,6 @@
 
     <div id="buttons-top-left" style="float: left; margin-left: 8px; margin-top: 0px">
         {# <button type="button" class="btn btn-secondary">Test</button> #}
-
     </div>
 
     <div id="buttons-top-right" style="float: right; margin-right: 8px; margin-top: 0px">
@@ -60,14 +59,14 @@
         <button id="edit-btn" type="button" class="btn btn-primary" disabled>Edit</button>
     </div>
 
-    <ul>
-        <li>ID: {{ staff.sid }}</li>
-        <li>Name: {{ staff.sname }}</li>
-        <li>Payrate: ${{ staff.spayrate }}</li>
-        <li>Fixed Payrate: {{ staff.spayfixed }}</li>
-        <li>Position: {{ staff.sposition }}</li>
-        <li>Notes: "{{ staff.snote }}"</li>
-    </ul>
+    <table>
+        <tr><td>ID:</td><td>{{ staff.sid }}</td></tr>
+        <tr><td>Name:</td><td>{{ staff.sname }}</td></tr>
+        <tr><td>Payrate:</td><td>${{ staff.spayrate }}</td></tr>
+        <tr><td>Fixed Payrate:</td><td>{{ staff.spayfixed }}</td></tr>
+        <tr><td>Position:</td><td>{{ staff.sposition }}</td></tr>
+        <tr><td>Notes:</td><td>{{ staff.snote }}</td></tr>
+    </table>
 
 
   </body>

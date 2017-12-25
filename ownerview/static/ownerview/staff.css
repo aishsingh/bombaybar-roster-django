@@ -4,6 +4,17 @@ body {
 #save-btn {
     display: none;
 }
+table {
+    margin-top: 35px;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+}
+table td:first-child {
+    text-align: right;
+    font-weight: bold;
+    padding-right: 8px;
+}
 
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
