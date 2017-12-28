@@ -62,7 +62,8 @@ function calcWeekDates() {
     // Determine dates of the week
     var date_cells = document.getElementById("week-dates").children;
     for (var i = 1; i < date_cells.length-1; i++) {
-        $(date_cells[i]).html(day.date() + " " + day.format("MMM"));
+        $(date_cells[i]).html(day.format("DD MMM"));
+        $(date_cells[i]).data("fulldate", day.format("DD/MM/YYYY"));
         day.add(1, 'days');
     }
 
@@ -384,7 +385,10 @@ $(document).ready(function()
         // Find what times were edited
         $("[data-starttime][data-endtime]").each(function() {
             if ($(this).is('[data-edited-start]') && $(this).is('[data-edited-end]')) {
-                alert("New history [start+end] [day:" + $(this).index() + "] ");
+                var sid = $('td:first-child', $(this).parents('tr')).data('sid');
+                var date = $('th:eq(' + $(this).index() + ')', $(this).parents('table')).data('fulldate');
+
+                alert("New history [start+end] [sid:" + sid + "] [date:" + date + "] ");
 
                 $(this).removeAttr('data-edited-start').removeAttr('data-edited-end');
                 $(this).children().eq(0).addClass('history-time');
@@ -392,13 +396,19 @@ $(document).ready(function()
 
             }
             else if ($(this).is('[data-edited-start]')) {
-                alert("New history [start] [day:" + $(this).index() + "] ");
+                var sid = $('td:first-child', $(this).parents('tr')).data('sid');
+                var date = $('th:eq(' + $(this).index() + ')', $(this).parents('table')).data('fulldate');
+
+                alert("New history [start] [sid:" + sid + "] [date:" + date + "] ");
 
                 $(this).removeAttr('data-edited-start');
                 $(this).children().eq(0).addClass('history-time');
             }
             else if ($(this).is('[data-edited-end]')) {
-                alert("New history [end] [day:" + $(this).index() + "] ");
+                var sid = $('td:first-child', $(this).parents('tr')).data('sid');
+                var date = $('th:eq(' + $(this).index() + ')', $(this).parents('table')).data('fulldate');
+
+                alert("New history [end] [sid:" + sid + "] [date:" + date + "] ");
 
                 $(this).removeAttr('data-edited-end');
                 $(this).children().eq(1).addClass('history-time');
