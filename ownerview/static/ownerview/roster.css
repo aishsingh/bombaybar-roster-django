@@ -16,11 +16,17 @@ body {
     table td:first-child {
     width: 50px;
 }*/
-#roster-table th, #roster-table td:not(:first-child):not(:last-child) {
+#roster-table th:not(#hide-table), #roster-table td:not(:first-child):not(:last-child) {
     border: 1px solid rgb(52, 58, 64);
     border-collapse: collapse;
-    padding: 5px 2px 2px 5px;
+    padding: 4px 2px 2px 4px;
     text-align: center;
+}
+#hide-table {
+    text-align: right;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: transparent;
 }
 #week-dates button {
     margin: 0px;

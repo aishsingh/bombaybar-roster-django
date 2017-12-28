@@ -177,7 +177,7 @@ function displayRoster(roster_data) {
         var rowid = $("#roster-table td[data-sid='" + roster_data[i].fields.staff +"']").closest('tr').index();
         var cell = $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster_data[i].fields.rday + ")");
 
-        cell.html(roster_data[i].fields.rstarttime + " - " + roster_data[i].fields.rendtime);
+        cell.html("<a>" + roster_data[i].fields.rstarttime + "</a> - <a>" + roster_data[i].fields.rendtime + "</a>");
         cell.data("pk", roster_data[i].pk);
     }
 }
@@ -190,15 +190,15 @@ function displayHistory(history_data) {
             var new_start = history_data[i].fields.hstarttime;
             var new_end = history_data[i].fields.hendtime;
             if (new_start && new_end) {
-                cell.html(history_data[i].fields.hstarttime + " - " + history_data[i].fields.hendtime);
+                cell.html("<a>" + history_data[i].fields.hstarttime + "</a> - <a>" + history_data[i].fields.hendtime + "</a>");
             }
             else if (new_start) {
                 var times = cell.html().split(' - ');
-                cell.html(history_data[i].fields.hstarttime + " - " + times[1]);
+                cell.html("<a>" + history_data[i].fields.hstarttime + "</a> - <a>" + times[1] + "</a>");
             }
             else {
                 var times = cell.html().split(' - ');
-                cell.html(times[0] + " - " + history_data[i].fields.hendtime);
+                cell.html("<a>" + times[0] + "</a> - <a>" + history_data[i].fields.hendtime + "</a>");
             }
         }
         else {
@@ -363,6 +363,36 @@ $(document).ready(function()
     });
 
     // Button events
+    $(document).on('click', '#save-btn', function(event) {
+        $("[data-starttime][data-endtime]").each(function() {
+            if ($(this).get(0).prop('data-changed') && $(this).get(1).prop('data-changed')) {
+                alert("New history [col:" + $(this).index() + "] ");
+                // $(this).data('rid')
+
+            }
+
+            $(this).removeAttr('data-starttime').removeAttr('data-endtime');
+        });
+
+        cell_selected = null;
+        $("#edit-btn").removeClass( "btn-danger" ).addClass( "btn-primary" ).html("Edit");
+        $("#save-btn").hide();
+
+        // Revert default style
+        $("#roster-table .roster-cell").css("background-color", "rgba(255, 255, 255, 0.7)");
+        $("#roster-table .roster-cell").css("color", "rgb(40, 40, 40)");
+        $("#roster-table .verified-history-cell").css("background-color", "rgba(255, 255, 255, 0.7)");
+        $("#roster-table .verified-history-cell").css("color", "rgb(200, 50, 50)");
+
+        $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "solid");
+        $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "rgb(52, 58, 64)");
+
+        styleRoster();
+
+        edit_mode = false;
+        enableButtonsForEditing();
+    });
+
     $(document).on('click', '#edit-btn', function(event) {
         if (!edit_mode) {
             $("#edit-btn").removeClass( "btn-primary" ).addClass( "btn-danger" ).html("Cancel");
@@ -380,10 +410,10 @@ $(document).ready(function()
             edit_mode = true;
             disableButtonsForEditing();
         }
-        else {
+        else {  // Cancel
             if (cell_selected != null) {
+                $(this).html("<a>" + $(this).attr('data-starttime') + "</a> - <a>" + $(this).attr('data-endtime') + "</a>");
                 $("[data-starttime][data-endtime]").each(function() {
-                    $(this).html($(this).attr('data-starttime') + " - " + $(this).attr('data-endtime'));
                     $(this).removeAttr('data-starttime').removeAttr('data-endtime');
                 });
 
@@ -421,7 +451,7 @@ $(document).ready(function()
                     var end = times.last().val().replace(/\s/g, '');
 
                     if (start && end)
-                        cell_selected.html(start + " - " + end);
+                        cell_selected.html("<a>" + start + "</a> - <a>" + end + "</a>");
                     else
                         cell_selected.html("&nbsp;");
                 }
@@ -431,13 +461,13 @@ $(document).ready(function()
             }
 
             if ($(this).html() && $(this).html() != "&nbsp;" && $(this).html() != 'x') {
-                var times = $(this).html().split(' - ');
+                var times = $(this).children();
                 if (!$(this).is("[data-starttime]") && !$(this).is("[data-endtime]")) {
-                    $(this).attr('data-starttime', times[0]);
-                    $(this).attr('data-endtime', times[1]);
+                    $(this).attr('data-starttime', times[0].html());
+                    $(this).attr('data-endtime', times[1].html());
                 }
 
-                $(this).html("<input id='start-input' type='text' value='" + times[0] + "'><input id='end-input' type='text' value='" + times[1] + "'>");
+                $(this).html("<input id='start-input' type='text' value='" + times[0].html() + "'><input id='end-input' type='text' value='" + times[1].html() + "'>");
             }
             else { // Empty roster
                 if (!$(this).is("[data-starttime]") && !$(this).is("[data-endtime]")) {
@@ -455,17 +485,21 @@ $(document).ready(function()
             $('#start-input').on('input', function() { 
                 if ($(this).parent().attr('data-starttime') !== $(this).val()) {
                     $(this).parent().css("background-color", "rgba(66, 139, 202, 1.0)");
+                    $(this).prop("data-changed", true);
                 }
                 else if ($(this).parent().attr('data-endtime') === $(this).next().val()) {
                     $(this).parent().css("background-color", "rgba(100, 100, 100, 0.1)");
+                    $(this).removeProp("data-changed");
                 }
             });
             $('#end-input').on('input', function() { 
                 if ($(this).parent().attr('data-endtime') !== $(this).val()) {
                     $(this).parent().css("background-color", "rgba(66, 139, 202, 1.0)");
+                    $(this).prop("data-changed", true);
                 }
                 else if ($(this).parent().attr('data-starttime') === $(this).prev().val()) {
                     $(this).parent().css("background-color", "rgba(100, 100, 100, 0.1)");
+                    $(this).removeProp("data-changed");
                 }
             });
         }

@@ -109,6 +109,7 @@
 
     {% if staff_list %}
     <table class="noselect" id="roster-table">
+        <thead>
         <tr id="week-dates">
             <th>
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
@@ -124,7 +125,9 @@
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
+            <th id="hide-table">
+                <button type="button" class="btn btn-secondary btn-sm"><span class="ui-icon ui-icon-pin-w"></span></button>
+            </th>
 
         </tr>
         <tr id="week-days">
@@ -138,7 +141,9 @@
             <th>Sunday</th>
             <th>Hours</th>                    
         </tr>
+        </thead>
 
+        <tbody>
         {% for staff in staff_list %}
         <tr>
           {% if staff.sposition == 1 %}
@@ -157,6 +162,7 @@
           <td class="hours-cell"></td>
         </tr>
         {% endfor %}
+        </tbody>
 
       </table>
 
