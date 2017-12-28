@@ -25,9 +25,9 @@ function calcStaffHours() {
             }
             else {
                 if ($(this).html() != '&nbsp;' && $(this).html() != 'x') {
-                    var val = $(this).html().split(' - ');
-                    var starttime = moment(val[0], 'HH:mm');
-                    var endtime = moment(val[1], 'HH:mm');
+                    var times = $(this).find('a');
+                    var starttime = moment(times.eq(0).html(), 'HH:mm');
+                    var endtime = moment(times.eq(1).html(), 'HH:mm');
                     var lunch_break = 0;  // hours
                     if (starttime.isBefore(moment('14:00', 'HH:mm'))) lunch_break = 0.5;
 
@@ -193,12 +193,12 @@ function displayHistory(history_data) {
                 cell.html("<a>" + history_data[i].fields.hstarttime + "</a> - <a>" + history_data[i].fields.hendtime + "</a>");
             }
             else if (new_start) {
-                var times = cell.html().split(' - ');
-                cell.html("<a>" + history_data[i].fields.hstarttime + "</a> - <a>" + times[1] + "</a>");
+                var times = $(this).find('a');
+                cell.html("<a>" + history_data[i].fields.hstarttime + "</a> - <a>" + times.eq(1).html() + "</a>");
             }
             else {
-                var times = cell.html().split(' - ');
-                cell.html("<a>" + times[0] + "</a> - <a>" + history_data[i].fields.hendtime + "</a>");
+                var times = $(this).find('a');
+                cell.html("<a>" + times.eq(0).html() + "</a> - <a>" + history_data[i].fields.hendtime + "</a>");
             }
         }
         else {
@@ -364,17 +364,35 @@ $(document).ready(function()
 
     // Button events
     $(document).on('click', '#save-btn', function(event) {
-        $("[data-starttime][data-endtime]").each(function() {
-            if ($(this).get(0).prop('data-changed') && $(this).get(1).prop('data-changed')) {
-                alert("New history [col:" + $(this).index() + "] ");
-                // $(this).data('rid')
+        // Remove inputs
+        if (cell_selected != null) {
+            cell_selected.html("<a>" + cell_selected.attr('data-starttime') + "</a> - <a>" + cell_selected.attr('data-endtime') + "</a>");
 
+            cell_selected = null;
+        }
+
+        // Find what times were edited
+        $("[data-starttime][data-endtime]").each(function() {
+            if ($(this).is('[data-edited-start]') && $(this).is('[data-edited-end]')) {
+                alert("New history [start+end] [day:" + $(this).index() + "] ");
+
+                $(this).removeAttr('data-edited-start');
+                $(this).removeAttr('data-edited-end');
+            }
+            else if ($(this).is('[data-edited-start]')) {
+                alert("New history [start] [day:" + $(this).index() + "] ");
+
+                $(this).removeAttr('data-edited-start');
+            }
+            else if ($(this).is('[data-edited-end]')) {
+                alert("New history [end] [day:" + $(this).index() + "] ");
+
+                $(this).removeAttr('data-edited-end');
             }
 
             $(this).removeAttr('data-starttime').removeAttr('data-endtime');
         });
 
-        cell_selected = null;
         $("#edit-btn").removeClass( "btn-danger" ).addClass( "btn-primary" ).html("Edit");
         $("#save-btn").hide();
 
@@ -411,10 +429,12 @@ $(document).ready(function()
             disableButtonsForEditing();
         }
         else {  // Cancel
+            // Remove inputs
             if (cell_selected != null) {
-                $(this).html("<a>" + $(this).attr('data-starttime') + "</a> - <a>" + $(this).attr('data-endtime') + "</a>");
+                cell_selected.html("<a>" + cell_selected.attr('data-starttime') + "</a> - <a>" + cell_selected.attr('data-endtime') + "</a>");
                 $("[data-starttime][data-endtime]").each(function() {
                     $(this).removeAttr('data-starttime').removeAttr('data-endtime');
+                    $(this).removeAttr('data-edited-start').removeAttr('data-edited-end');
                 });
 
                 cell_selected = null;
@@ -445,7 +465,7 @@ $(document).ready(function()
                 if ($(this).is(cell_selected)) 
                     return;  // Dont need to interpret already selected cell
                 else {
-                    // Remove prev selected inouts
+                    // Remove prev selected inputs
                     var times = cell_selected.find("input");
                     var start = times.first().val().replace(/\s/g, '');
                     var end = times.last().val().replace(/\s/g, '');
@@ -461,13 +481,13 @@ $(document).ready(function()
             }
 
             if ($(this).html() && $(this).html() != "&nbsp;" && $(this).html() != 'x') {
-                var times = $(this).children();
+                var times = $(this).find('a');
                 if (!$(this).is("[data-starttime]") && !$(this).is("[data-endtime]")) {
-                    $(this).attr('data-starttime', times[0].html());
-                    $(this).attr('data-endtime', times[1].html());
+                    $(this).attr('data-starttime', times.eq(0).html());
+                    $(this).attr('data-endtime', times.eq(1).html());
                 }
 
-                $(this).html("<input id='start-input' type='text' value='" + times[0].html() + "'><input id='end-input' type='text' value='" + times[1].html() + "'>");
+                $(this).html("<input id='start-input' type='text' value='" + times.eq(0).html() + "'><input id='end-input' type='text' value='" + times.eq(1).html() + "'>");
             }
             else { // Empty roster
                 if (!$(this).is("[data-starttime]") && !$(this).is("[data-endtime]")) {
@@ -485,21 +505,21 @@ $(document).ready(function()
             $('#start-input').on('input', function() { 
                 if ($(this).parent().attr('data-starttime') !== $(this).val()) {
                     $(this).parent().css("background-color", "rgba(66, 139, 202, 1.0)");
-                    $(this).prop("data-changed", true);
+                    $(this).parent().attr("data-edited-start", true);
                 }
                 else if ($(this).parent().attr('data-endtime') === $(this).next().val()) {
                     $(this).parent().css("background-color", "rgba(100, 100, 100, 0.1)");
-                    $(this).removeProp("data-changed");
+                    $(this).parent().removeAttr("data-edited-start");
                 }
             });
             $('#end-input').on('input', function() { 
                 if ($(this).parent().attr('data-endtime') !== $(this).val()) {
                     $(this).parent().css("background-color", "rgba(66, 139, 202, 1.0)");
-                    $(this).prop("data-changed", true);
+                    $(this).parent().attr("data-edited-end", true);
                 }
                 else if ($(this).parent().attr('data-starttime') === $(this).prev().val()) {
                     $(this).parent().css("background-color", "rgba(100, 100, 100, 0.1)");
-                    $(this).removeProp("data-changed");
+                    $(this).parent().removeAttr("data-edited-end");
                 }
             });
         }
