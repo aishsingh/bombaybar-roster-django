@@ -25,7 +25,7 @@ function calcStaffHours() {
             }
             else {
                 if ($(this).html() != '&nbsp;' && $(this).html() != 'x') {
-                    var times = $(this).find('a');
+                    var times = $(this).find('span');
                     var starttime = moment(times.eq(0).html(), 'HH:mm');
                     var endtime = moment(times.eq(1).html(), 'HH:mm');
                     var lunch_break = 0;  // hours
@@ -177,7 +177,7 @@ function displayRoster(roster_data) {
         var rowid = $("#roster-table td[data-sid='" + roster_data[i].fields.staff +"']").closest('tr').index();
         var cell = $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster_data[i].fields.rday + ")");
 
-        cell.html("<a>" + roster_data[i].fields.rstarttime + "</a> - <a>" + roster_data[i].fields.rendtime + "</a>");
+        cell.html("<span>" + roster_data[i].fields.rstarttime + "</span> - <span>" + roster_data[i].fields.rendtime + "</span>");
         cell.data("pk", roster_data[i].pk);
     }
 }
@@ -190,15 +190,15 @@ function displayHistory(history_data) {
             var new_start = history_data[i].fields.hstarttime;
             var new_end = history_data[i].fields.hendtime;
             if (new_start && new_end) {
-                cell.html("<a>" + history_data[i].fields.hstarttime + "</a> - <a>" + history_data[i].fields.hendtime + "</a>");
+                cell.html("<span>" + history_data[i].fields.hstarttime + "</span> - <span>" + history_data[i].fields.hendtime + "</span>");
             }
             else if (new_start) {
-                var times = $(this).find('a');
-                cell.html("<a>" + history_data[i].fields.hstarttime + "</a> - <a>" + times.eq(1).html() + "</a>");
+                var times = $(this).find('span');
+                cell.html("<span>" + history_data[i].fields.hstarttime + "</span> - <span>" + times.eq(1).html() + "</span>");
             }
             else {
-                var times = $(this).find('a');
-                cell.html("<a>" + times.eq(0).html() + "</a> - <a>" + history_data[i].fields.hendtime + "</a>");
+                var times = $(this).find('span');
+                cell.html("<span>" + times.eq(0).html() + "</span> - <span>" + history_data[i].fields.hendtime + "</span>");
             }
         }
         else {
@@ -366,7 +366,7 @@ $(document).ready(function()
     $(document).on('click', '#save-btn', function(event) {
         // Remove inputs
         if (cell_selected != null) {
-            cell_selected.html("<a>" + cell_selected.attr('data-starttime') + "</a> - <a>" + cell_selected.attr('data-endtime') + "</a>");
+            cell_selected.html("<span>" + cell_selected.attr('data-starttime') + "</span> - <span>" + cell_selected.attr('data-endtime') + "</span>");
 
             cell_selected = null;
         }
@@ -376,18 +376,22 @@ $(document).ready(function()
             if ($(this).is('[data-edited-start]') && $(this).is('[data-edited-end]')) {
                 alert("New history [start+end] [day:" + $(this).index() + "] ");
 
-                $(this).removeAttr('data-edited-start');
-                $(this).removeAttr('data-edited-end');
+                $(this).removeAttr('data-edited-start').removeAttr('data-edited-end');
+                $(this).children().eq(0).addClass('history-time');
+                $(this).children().eq(1).addClass('history-time');
+
             }
             else if ($(this).is('[data-edited-start]')) {
                 alert("New history [start] [day:" + $(this).index() + "] ");
 
                 $(this).removeAttr('data-edited-start');
+                $(this).children().eq(0).addClass('history-time');
             }
             else if ($(this).is('[data-edited-end]')) {
                 alert("New history [end] [day:" + $(this).index() + "] ");
 
                 $(this).removeAttr('data-edited-end');
+                $(this).children().eq(1).addClass('history-time');
             }
 
             $(this).removeAttr('data-starttime').removeAttr('data-endtime');
@@ -431,7 +435,7 @@ $(document).ready(function()
         else {  // Cancel
             // Remove inputs
             if (cell_selected != null) {
-                cell_selected.html("<a>" + cell_selected.attr('data-starttime') + "</a> - <a>" + cell_selected.attr('data-endtime') + "</a>");
+                cell_selected.html("<span>" + cell_selected.attr('data-starttime') + "</span> - <span>" + cell_selected.attr('data-endtime') + "</span>");
                 $("[data-starttime][data-endtime]").each(function() {
                     $(this).removeAttr('data-starttime').removeAttr('data-endtime');
                     $(this).removeAttr('data-edited-start').removeAttr('data-edited-end');
@@ -471,7 +475,7 @@ $(document).ready(function()
                     var end = times.last().val().replace(/\s/g, '');
 
                     if (start && end)
-                        cell_selected.html("<a>" + start + "</a> - <a>" + end + "</a>");
+                        cell_selected.html("<span>" + start + "</span> - <span>" + end + "</span>");
                     else
                         cell_selected.html("&nbsp;");
                 }
@@ -481,7 +485,7 @@ $(document).ready(function()
             }
 
             if ($(this).html() && $(this).html() != "&nbsp;" && $(this).html() != 'x') {
-                var times = $(this).find('a');
+                var times = $(this).find('span');
                 if (!$(this).is("[data-starttime]") && !$(this).is("[data-endtime]")) {
                     $(this).attr('data-starttime', times.eq(0).html());
                     $(this).attr('data-endtime', times.eq(1).html());
