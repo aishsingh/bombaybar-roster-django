@@ -12,9 +12,9 @@ function calcStaffHours() {
         var hours = 0;
 
         $(this).find('td').each(function () {
-            if ($(this).attr('class') == 'staff-cell')
+            if ($(this).attr('class') == "staff-cell")
                 sid = $(this).data('sid');
-            else if ($(this).attr('class') == 'hours-cell') {
+            else if ($(this).attr('class') == "hours-cell") {
                 if (hours == 0) {
                     $(this).css("color", "rgb(110, 110, 110)");
                     $(this).html("-");
@@ -24,7 +24,7 @@ function calcStaffHours() {
                 }
             }
             else {
-                if ($(this).html() != '&nbsp;' && $(this).html() != 'x') {
+                if ($(this).html() != "&nbsp;" && !$(this).find('span').hasClass("history-away")) {
                     var times = $(this).find('span');
                     var starttime = moment(times.eq(0).html(), 'HH:mm');
                     var endtime = moment(times.eq(1).html(), 'HH:mm');
@@ -191,18 +191,28 @@ function displayHistory(history_data) {
             var new_end = history_data[i].fields.hendtime;
             if (new_start && new_end) {
                 cell.html("<span>" + history_data[i].fields.hstarttime + "</span> - <span>" + history_data[i].fields.hendtime + "</span>");
+
+                var times = cell.find('span');
+                times.eq(0).addClass('history-time');
+                times.eq(1).addClass('history-time');
             }
             else if (new_start) {
-                var times = $(this).find('span');
+                var times = cell.find('span');
                 cell.html("<span>" + history_data[i].fields.hstarttime + "</span> - <span>" + times.eq(1).html() + "</span>");
+
+                times = cell.find('span');
+                times.eq(0).addClass('history-time');
             }
             else {
-                var times = $(this).find('span');
+                var times = cell.find('span');
                 cell.html("<span>" + times.eq(0).html() + "</span> - <span>" + history_data[i].fields.hendtime + "</span>");
+
+                times = cell.find('span');
+                times.eq(1).addClass('history-time');
             }
         }
         else {
-            cell.html('x');
+            cell.html("<span class='history-away'>x</span>");
         }
 
         // Differentiate from the normal roster
@@ -484,7 +494,7 @@ $(document).ready(function()
                 $("#date-btn-group button").prop('disabled', false);
             }
 
-            if ($(this).html() && $(this).html() != "&nbsp;" && $(this).html() != 'x') {
+            if ($(this).html() && $(this).html() != "&nbsp;" && !$(this).find('span').hasClass("history-away")) {  // TODO: Make sick rosters editable
                 var times = $(this).find('span');
                 if (!$(this).is("[data-starttime]") && !$(this).is("[data-endtime]")) {
                     $(this).attr('data-starttime', times.eq(0).html());
