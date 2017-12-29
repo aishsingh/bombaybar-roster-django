@@ -8,6 +8,7 @@ from datetime import date, datetime, time, timedelta
 from django.utils.timezone import is_aware
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.serializers import serialize
+from django.core.exceptions import ValidationError
 
 from .models import Staff, Roster, History
 
@@ -44,6 +45,23 @@ def get_weekly_history(request, startdate, enddate):
     weekly_history = History.objects.filter(hdate__range=(start_date, end_date)).order_by('staff__sname')
     serialized = serialize('json', weekly_history, cls=LazyEncoder)
     return HttpResponse(serialized, content_type="application/javascript")
+
+@login_required
+def create_history(request):
+    h = History(
+            hdate = request.POST['date'],
+            htype = request.POST['type'],
+            hstarttime = request.POST['start'],
+            hendtime = request.POST['end'],
+            staff = Staff.objects.get(pk=request.POST['sid'])
+    );
+
+    try:
+        h.save();
+    except ValidationError, err:
+        return HttpResponse("Validation error", status=400, reason="; ".join(err.messages));
+
+    return HttpResponse("Success");
 
 @login_required
 def roster(request):

@@ -63,7 +63,7 @@ function calcWeekDates() {
     var date_cells = document.getElementById("week-dates").children;
     for (var i = 1; i < date_cells.length-1; i++) {
         $(date_cells[i]).html(day.format("DD MMM"));
-        $(date_cells[i]).data("fulldate", day.format("DD/MM/YYYY"));
+        $(date_cells[i]).data("fulldate", day.format("YYYY-MM-DD"));
         day.add(1, 'days');
     }
 
@@ -375,24 +375,52 @@ $(document).ready(function()
 
     // Button events
     $(document).on('click', '#save-btn', function(event) {
-        // Remove inputs
-        if (cell_selected != null) {
-            cell_selected.html("<span>" + cell_selected.attr('data-starttime') + "</span> - <span>" + cell_selected.attr('data-endtime') + "</span>");
+        // Remove selected inputs
+        var start = cell_selected.find("input").first().val().replace(/\s/g, '');
+        var end = cell_selected.find("input").last().val().replace(/\s/g, '');
 
-            cell_selected = null;
-        }
+        if (start && end)
+            cell_selected.html("<span>" + start + "</span> - <span>" + end + "</span>");
+        else // TODO
+            cell_selected.html("&nbsp;");
+
+        cell_selected = null;
 
         // Find what times were edited
         $("[data-starttime][data-endtime]").each(function() {
             if ($(this).is('[data-edited-start]') && $(this).is('[data-edited-end]')) {
-                var sid = $('td:first-child', $(this).parents('tr')).data('sid');
-                var date = $('th:eq(' + $(this).index() + ')', $(this).parents('table')).data('fulldate');
-
-                alert("New history [start+end] [sid:" + sid + "] [date:" + date + "] ");
-
                 $(this).removeAttr('data-edited-start').removeAttr('data-edited-end');
                 $(this).children().eq(0).addClass('history-time');
                 $(this).children().eq(1).addClass('history-time');
+
+                var sid = $('td:first-child', $(this).parents('tr')).data('sid');
+                var date = $('th:eq(' + $(this).index() + ')', $(this).parents('table')).data('fulldate');
+                var times = $(this).find('span');
+
+                alert("New history [start+end] [sid:" + sid + "] [date:" + date + "] [start:" + times.eq(0).html() + "] [end:" + times.eq(1).html() + "]");
+
+                // Post History
+                $.ajax({
+                        url: "/createhistory/",
+                        method: "POST",
+                        data: { 
+                            date: date, 
+                            type: 1, 
+                            start: times.eq(0).html(), 
+                            end: times.eq(1).html(),
+                            sid: sid, 
+                            csrfmiddlewaretoken: CSRF_TOKEN
+                        },
+                        success: function(response) {
+                            alert("Edit successful");
+                        },
+                        error: function(response) {
+                            alert("Edit failure: " + response.responseText);
+                        }
+                })
+                // .done(function(msg) {
+                //     alert("Data done: " + msg);
+                // });
 
             }
             else if ($(this).is('[data-edited-start]')) {

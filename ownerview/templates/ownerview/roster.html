@@ -21,6 +21,10 @@
     <link rel="stylesheet" href="{% static 'ownerview/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'ownerview/roster.css' %}">
 
+    <script type="text/javascript">
+        window.CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
+
   </head>
   <body>
 
