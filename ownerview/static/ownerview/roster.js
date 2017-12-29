@@ -8,22 +8,19 @@ var history_data_received;
 
 function calcStaffHours() {
     $('#roster-table tr:gt(1)').each(function () {
-        var sid = null;
         var hours = 0;
 
         $(this).find('td').each(function () {
-            if ($(this).attr('class') == "staff-cell")
-                sid = $(this).data('sid');
-            else if ($(this).attr('class') == "hours-cell") {
+            if ($(this).attr('class') == "hours-cell" ) {
                 if (hours == 0) {
                     $(this).css("color", "rgb(110, 110, 110)");
                     $(this).html("-");
                 }
                 else {
-                    $(this).html(hours + " h");
+                    $(this).html(Number(Math.round(hours + 'e2')+'e-2') + " h");
                 }
             }
-            else {
+            else if ($(this).attr('class') != "staff-cell") {
                 if ($(this).html() != "&nbsp;" && !$(this).find('span').hasClass("history-away")) {
                     var times = $(this).find('span');
                     var starttime = moment(times.eq(0).html(), 'HH:mm');
@@ -35,7 +32,6 @@ function calcStaffHours() {
                 }
             }
         });
-        // console.log("sid: " + sid + ", hours: " + hours);
     });
 }
 
@@ -174,24 +170,24 @@ function reloadRosterTable(roster_data) {
 }
 
 function displayRoster(roster_data) {
-    for (var i = 0; i < roster_data.length; i++) {
-        var rowid = $("#roster-table td[data-sid='" + roster_data[i].fields.staff +"']").closest('tr').index();
-        var cell = $("#roster-table tr:eq(" + rowid + ") td:eq(" + roster_data[i].fields.rday + ")");
+    $.each(roster_data, function(i, data) {
+        var rowid = $("#roster-table td[data-sid='" + data.fields.staff +"']").parent().index()+2;
+        var cell = $("#roster-table tr:eq(" + rowid + ") td:eq(" + data.fields.rday + ")");
 
-        cell.html("<span>" + roster_data[i].fields.rstarttime + "</span> - <span>" + roster_data[i].fields.rendtime + "</span>");
-        cell.data("pk", roster_data[i].pk);
-    }
+        cell.html("<span>" + data.fields.rstarttime + "</span> - <span>" + data.fields.rendtime + "</span>");
+        cell.data("pk", data.pk);
+    });
 }
 function displayHistory(history_data) {
-    for (var i = 0; i < history_data.length; i++) {
-        var rowid = $("#roster-table td[data-sid='" + history_data[i].fields.staff +"']").closest('tr').index();
-        var hday = moment(history_data[i].fields.hdate).isoWeekday();
+    $.each(history_data, function(i, data) {
+        var rowid = $("#roster-table td[data-sid='" + data.fields.staff +"']").parent().index()+2;
+        var hday = moment(data.fields.hdate).isoWeekday();
         var cell = $("#roster-table tr:eq(" + rowid + ") td:eq(" + hday + ")");
-        if (history_data[i].fields.htype == 1) {
-            var new_start = history_data[i].fields.hstarttime;
-            var new_end = history_data[i].fields.hendtime;
+        if (data.fields.htype == 1) {
+            var new_start = data.fields.hstarttime;
+            var new_end = data.fields.hendtime;
             if (new_start && new_end) {
-                cell.html("<span>" + history_data[i].fields.hstarttime + "</span> - <span>" + history_data[i].fields.hendtime + "</span>");
+                cell.html("<span>" + data.fields.hstarttime + "</span> - <span>" + data.fields.hendtime + "</span>");
 
                 var times = cell.find('span');
                 times.eq(0).addClass('history-time');
@@ -199,14 +195,14 @@ function displayHistory(history_data) {
             }
             else if (new_start) {
                 var times = cell.find('span');
-                cell.html("<span>" + history_data[i].fields.hstarttime + "</span> - <span>" + times.eq(1).html() + "</span>");
+                cell.html("<span>" + data.fields.hstarttime + "</span> - <span>" + times.eq(1).html() + "</span>");
 
                 times = cell.find('span');
                 times.eq(0).addClass('history-time');
             }
             else {
                 var times = cell.find('span');
-                cell.html("<span>" + times.eq(0).html() + "</span> - <span>" + history_data[i].fields.hendtime + "</span>");
+                cell.html("<span>" + times.eq(0).html() + "</span> - <span>" + data.fields.hendtime + "</span>");
 
                 times = cell.find('span');
                 times.eq(1).addClass('history-time');
@@ -218,12 +214,12 @@ function displayHistory(history_data) {
 
         // Differentiate from the normal roster
         cell.removeClass("roster-cell").addClass("verified-history-cell");
-        cell.data("pk", history_data[i].pk);
+        cell.data("pk", data.pk);
 
         // Tooltip
-        if (history_data[i].fields.hnote)
-            cell.tooltip({title: history_data[i].fields.hnote});
-    }
+        if (data.fields.hnote)
+            cell.tooltip({title: data.fields.hnote});
+    });
 }
 
 function prepareExportData() {
