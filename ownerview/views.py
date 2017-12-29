@@ -51,8 +51,8 @@ def create_history(request):
     h = History(
             hdate = request.POST['date'],
             htype = request.POST['type'],
-            hstarttime = request.POST['start'],
-            hendtime = request.POST['end'],
+            hstarttime = request.POST['start'] if request.POST['start'] else None,
+            hendtime = request.POST['end'] if request.POST['end'] else None,
             staff = Staff.objects.get(pk=request.POST['sid'])
     );
 

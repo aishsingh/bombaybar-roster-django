@@ -17,7 +17,7 @@ function calcStaffHours() {
                     $(this).html("-");
                 }
                 else {
-                    $(this).html(Number(Math.round(hours + 'e2')+'e-2') + " h");
+                    $(this).html(Number(Math.round(hours + 'e1')+'e-1') + " h");
                 }
             }
             else if ($(this).attr('class') != "staff-cell") {
@@ -356,7 +356,7 @@ $(document).ready(function()
             onChangeMonthYear: function(year, month, inst) {
                 selectCurrentWeek();
             }
-    }).datepicker('widget').addClass('ui-weekpicker');;
+    }).datepicker('widget').addClass('ui-weekpicker');
     var selectCurrentWeek = function() {
         window.setTimeout(function () {
             $('#week-picker').datepicker('widget').find('.ui-datepicker-current-day a').addClass('ui-state-active')
@@ -384,17 +384,12 @@ $(document).ready(function()
 
         // Find what times were edited
         $("[data-starttime][data-endtime]").each(function() {
-            if ($(this).is('[data-edited-start]') && $(this).is('[data-edited-end]')) {
-                $(this).removeAttr('data-edited-start').removeAttr('data-edited-end');
-                $(this).children().eq(0).addClass('history-time');
-                $(this).children().eq(1).addClass('history-time');
+            var sid = $('td:first-child', $(this).parents('tr')).data('sid');
+            var date = $('th:eq(' + $(this).index() + ')', $(this).parents('table')).data('fulldate');
+            var times = $(this).find('span');
 
-                var sid = $('td:first-child', $(this).parents('tr')).data('sid');
-                var date = $('th:eq(' + $(this).index() + ')', $(this).parents('table')).data('fulldate');
-                var times = $(this).find('span');
-
-                alert("New history [start+end] [sid:" + sid + "] [date:" + date + "] [start:" + times.eq(0).html() + "] [end:" + times.eq(1).html() + "]");
-
+            if ($(this).is('[data-edited-start]') || $(this).is('[data-edited-end]')) {
+                // alert("New history [start+end] [sid:" + sid + "] [date:" + date + "] [start:" + times.eq(0).html() + "] [end:" + times.eq(1).html() + "]");
                 // Post History
                 $.ajax({
                         url: "/createhistory/",
@@ -408,43 +403,71 @@ $(document).ready(function()
                             csrfmiddlewaretoken: CSRF_TOKEN
                         },
                         success: function(response) {
-                            alert("Edit successful");
+                            console.log("Edit successful");
+
+                            $("[data-starttime][data-endtime]").each(function() {
+                                if ($(this).is('[data-edited-start]') && $(this).is('[data-edited-end]')) {
+                                    $(this).children().eq(0).addClass('history-time');
+                                    $(this).children().eq(1).addClass('history-time');
+                                    $(this).removeAttr('data-edited-start').removeAttr('data-edited-end');
+                                }
+                                else if ($(this).is('[data-edited-start]')) {
+                                    $(this).children().eq(0).addClass('history-time');
+                                    $(this).removeAttr('data-edited-start');
+                                }
+                                else if ($(this).is('[data-edited-end]')) {
+                                    $(this).children().eq(1).addClass('history-time');
+                                    $(this).removeAttr('data-edited-end');
+                                }
+
+                                $(this).removeAttr('data-starttime').removeAttr('data-endtime');
+                                $(this).removeClass("roster-cell").addClass("verified-history-cell");
+                                // $(this).data("pk", data.pk);  TODO: response return new pk
+                            });
+
+                            // Stop loading style
+                            enableAllButtons();
+                            calcStaffHours();
+                            prepareExportData();
+                            $("#roster-table").css("background-image", "none");
+                            $("#roster-table td:not(:first-child)").css("opacity", "1").css("border-color", "rgb(52, 58, 64)");
                         },
                         error: function(response) {
-                            alert("Edit failure: " + response.responseText);
+                            console.log("Edit failure: " + response.responseText);
+
+                            $("[data-starttime][data-endtime]").each(function() {
+                                if ($(this).is('[data-edited-start]') && $(this).is('[data-edited-end]')) 
+                                    $(this).removeAttr('data-edited-start').removeAttr('data-edited-end');
+                                else if ($(this).is('[data-edited-start]'))
+                                    $(this).removeAttr('data-edited-start');
+                                else if ($(this).is('[data-edited-end]'))
+                                    $(this).removeAttr('data-edited-end');
+
+                                $(this).removeAttr('data-starttime').removeAttr('data-endtime');
+                            });
+
+                            // Stop loading style
+                            enableAllButtons();
+                            calcStaffHours();
+                            prepareExportData();
+                            $("#roster-table").css("background-image", "none");
+                            $("#roster-table td:not(:first-child)").css("opacity", "1").css("border-color", "rgb(52, 58, 64)");
                         }
-                })
-                // .done(function(msg) {
-                //     alert("Data done: " + msg);
-                // });
+                });
 
             }
-            else if ($(this).is('[data-edited-start]')) {
-                var sid = $('td:first-child', $(this).parents('tr')).data('sid');
-                var date = $('th:eq(' + $(this).index() + ')', $(this).parents('table')).data('fulldate');
 
-                alert("New history [start] [sid:" + sid + "] [date:" + date + "] ");
-
-                $(this).removeAttr('data-edited-start');
-                $(this).children().eq(0).addClass('history-time');
-            }
-            else if ($(this).is('[data-edited-end]')) {
-                var sid = $('td:first-child', $(this).parents('tr')).data('sid');
-                var date = $('th:eq(' + $(this).index() + ')', $(this).parents('table')).data('fulldate');
-
-                alert("New history [end] [sid:" + sid + "] [date:" + date + "] ");
-
-                $(this).removeAttr('data-edited-end');
-                $(this).children().eq(1).addClass('history-time');
-            }
-
-            $(this).removeAttr('data-starttime').removeAttr('data-endtime');
         });
 
+        // Loading style
+        disableAllButtons();
+        $("#roster-table").css("background-image", "url(/static/ownerview/images/loading.gif)");
+        $("#roster-table td:not(:first-child)").css("opacity", "0.5").css("border-color", "transparent");
+
+        // Revert default style
         $("#edit-btn").removeClass( "btn-danger" ).addClass( "btn-primary" ).html("Edit");
         $("#save-btn").hide();
 
-        // Revert default style
         $("#roster-table .roster-cell").css("background-color", "rgba(255, 255, 255, 0.7)");
         $("#roster-table .roster-cell").css("color", "rgb(40, 40, 40)");
         $("#roster-table .verified-history-cell").css("background-color", "rgba(255, 255, 255, 0.7)");
@@ -477,9 +500,13 @@ $(document).ready(function()
             disableButtonsForEditing();
         }
         else {  // Cancel
-            // Remove inputs
+            // Remove selected inputs
             if (cell_selected != null) {
-                cell_selected.html("<span>" + cell_selected.attr('data-starttime') + "</span> - <span>" + cell_selected.attr('data-endtime') + "</span>");
+                if (cell_selected.attr('data-starttime') && cell_selected.attr('data-endtime'))
+                    cell_selected.html("<span>" + cell_selected.attr('data-starttime') + "</span> - <span>" + cell_selected.attr('data-endtime') + "</span>");
+                else
+                    cell_selected.html("&nbsp;");
+
                 $("[data-starttime][data-endtime]").each(function() {
                     $(this).removeAttr('data-starttime').removeAttr('data-endtime');
                     $(this).removeAttr('data-edited-start').removeAttr('data-edited-end');
