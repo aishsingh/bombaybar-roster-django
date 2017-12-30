@@ -75,7 +75,8 @@ function calcWeekDates() {
 function styleRoster() {
     // Highlight current day column
     if (!week_offset) {
-        var elements = $("#roster-table td, #roster-table th");
+        // var elements = $("#roster-table td, #roster-table th");
+        var elements = $("#roster-table th");
         var target_index = elements.index() + 1 + day_of_week;
 
         elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(255, 255, 255, 0.8)");
@@ -85,13 +86,13 @@ function styleRoster() {
         // Hightlight the future
         elements = $("#roster-table td");
         for (var i = target_index+1; i < (elements.index()+2+7); i++) {
-            elements.filter(":nth-child(" + i + ")").css("background-color", "rgba(200, 200, 200, 0.1)");
-            elements.filter(":nth-child(" + i + ")").css("color", "rgb(200, 200, 200)");
+            elements.filter(":nth-child(" + i + ")").css("background-color", "rgba(255, 255, 255, 0.5)");
+            // elements.filter(":nth-child(" + i + ")").css("color", "rgb(200, 200, 200)");
         }
     } // Hightlight the future
     else if (week_offset > 0) {
-        $("#roster-table .roster-cell").css("background-color", "rgba(200, 200, 200, 0.1)");
-        $("#roster-table .roster-cell").css("color", "rgb(200, 200, 200)");
+        $("#roster-table .roster-cell").css("background-color", "rgba(255, 255, 255, 0.5)");
+        // $("#roster-table .roster-cell").css("color", "rgb(200, 200, 200)");
         // $("#roster-table .verified-history-cell").css("background-color", "rgba(200, 200, 200, 0.1)");
         // $("#roster-table .verified-history-cell").css("color", "rgb(200, 200, 200)");
     }
@@ -290,12 +291,12 @@ $(document).ready(function()
         target_index = $(this).closest("tr").index() + 1;
         elements = $("tr");
         // elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(220, 53, 69, 1)");
-        elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(23, 162, 184, 1)");
+        elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(23, 162, 184, 0.6)");
 
         if (!week_offset && !edit_mode) {
             var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
-            cell.css("background-color", "rgba(23, 162, 184, 1)");
-            cell.css("color", "white");
+            // cell.css("background-color", "rgba(23, 162, 184, 1)");
+            // cell.css("color", "white");
         }
     });
     // Highlight mouseover row
@@ -305,12 +306,12 @@ $(document).ready(function()
         target_index = $(this).closest("tr").index() + 1;
         elements = $("tr");
         // elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(220, 53, 69, 1)");
-        elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(255, 255, 255, 0.1)");
+        elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(255, 255, 255, 0.3)");
 
         if (!week_offset && !edit_mode) {
             var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
-            cell.css("background-color", "rgba(255, 255, 255, 0.9)");
-            cell.css("color", "black");
+            // cell.css("background-color", "rgba(255, 255, 255, 0.7)");
+            // cell.css("color", "black");
         }
     });
     // Reset styles
@@ -320,8 +321,8 @@ $(document).ready(function()
 
         if (!week_offset && !edit_mode) {
             var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
-            cell.css("background-color", "rgba(255, 255, 255, 0.8)");
-            cell.css("color", "black");
+            cell.css("background-color", "");
+            cell.css("color", "");
         }
     });
 
@@ -468,13 +469,13 @@ $(document).ready(function()
         $("#edit-btn").removeClass( "btn-danger" ).addClass( "btn-primary" ).html("Edit");
         $("#save-btn").hide();
 
-        $("#roster-table .roster-cell").css("background-color", "rgba(255, 255, 255, 0.7)");
-        $("#roster-table .roster-cell").css("color", "rgb(40, 40, 40)");
-        $("#roster-table .verified-history-cell").css("background-color", "rgba(255, 255, 255, 0.7)");
-        $("#roster-table .verified-history-cell").css("color", "rgb(200, 50, 50)");
+        $("#roster-table .roster-cell").css("background-color", "");
+        $("#roster-table .roster-cell").css("color", "");
+        $("#roster-table .verified-history-cell").css("background-color", "");
+        $("#roster-table .verified-history-cell").css("color", "");
 
-        $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "solid");
-        $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "rgb(52, 58, 64)");
+        $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "");
+        $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "");
 
         styleRoster();
 
