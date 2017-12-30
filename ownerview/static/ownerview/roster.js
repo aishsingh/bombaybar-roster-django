@@ -65,7 +65,7 @@ function calcWeekDates() {
 
 
     // Reset table styles
-    $(".verified-history-cell").removeClass("verified-history-cell").addClass("roster-cell");
+    $(".verified-history-cell").removeClass("verified-history-cell").addClass("roster-cell").find(".history-time").removeClass("history-time");
     $("#roster-table td, #roster-table th").removeAttr('style').removeAttr('data-original-title').removeAttr('title');
     $("#roster-table td").tooltip('dispose');
 
@@ -492,7 +492,6 @@ $(document).ready(function()
             $("#roster-table .roster-cell").css("color", "white");
             $("#roster-table .verified-history-cell").css("background-color", "rgba(100, 100, 100, 0.1)");
             $("#roster-table .verified-history-cell").css("color", "white");
-
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "dashed");
             $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "rgb(170, 170, 170)");
 
@@ -519,13 +518,12 @@ $(document).ready(function()
             $("#save-btn").hide();
 
             // Revert default style
-            $("#roster-table .roster-cell").css("background-color", "rgba(255, 255, 255, 0.7)");
-            $("#roster-table .roster-cell").css("color", "rgb(40, 40, 40)");
-            $("#roster-table .verified-history-cell").css("background-color", "rgba(255, 255, 255, 0.7)");
-            $("#roster-table .verified-history-cell").css("color", "rgb(200, 50, 50)");
-
-            $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "solid");
-            $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "rgb(52, 58, 64)");
+            $("#roster-table .roster-cell").css("background-color", "");
+            $("#roster-table .roster-cell").css("color", "");
+            $("#roster-table .verified-history-cell").css("background-color", "");
+            $("#roster-table .verified-history-cell").css("color", "");
+            $("#roster-table td:not(:first-child):not(:last-child)").css("border-style", "");
+            $("#roster-table td:not(:first-child):not(:last-child)").css("border-color", "");
 
             styleRoster();
 

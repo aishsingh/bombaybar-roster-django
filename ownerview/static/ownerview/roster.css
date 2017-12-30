@@ -12,11 +12,7 @@ body {
     background-attachment: fixed;
     background-position: center 58%;
 }
-/*
-    table td:first-child {
-    width: 50px;
-}*/
-#roster-table th:not(#hide-table), #roster-table td:not(:first-child):not(:last-child) {
+#roster-table td:not(:first-child):not(:last-child) {
     border: 1px solid rgb(52, 58, 64);
     border-collapse: collapse;
     padding: 4px 2px 2px 4px;
@@ -31,10 +27,15 @@ body {
 #week-dates button {
     margin: 0px;
 }
-#week-dates th {
+#week-dates th:not(#hide-table) {
     /* font-size: 1.2em; */
     font-weight: normal;
     border: none;
+
+    /* border: 1px solid rgb(52, 58, 64); */
+    border-collapse: collapse;
+    padding: 4px 2px 2px 4px;
+    text-align: center;
 }
 #week-dates th, #week-days th {
     background: rgb(52, 58, 64);
@@ -43,6 +44,10 @@ body {
 }
 #week-days th {
     border: none;
+    /* border: 1px solid rgb(52, 58, 64); */
+    border-collapse: collapse;
+    padding: 4px 2px 2px 4px;
+    text-align: center;
 }
 .staff-cell {
     color: white;
@@ -59,7 +64,7 @@ body {
     color: rgb(0, 120, 0);
 }
 .verified-history-cell {
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.75);
 }
 .roster-cell {
     background: rgba(255, 255, 255, 0.7);
