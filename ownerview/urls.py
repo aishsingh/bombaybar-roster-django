@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^staff$', views.staff_list, name='staff_list'),
     url(r'^getroster/', views.get_roster),
     url(r'^getweeklyhistory/(?P<startdate>\d{4}-\d{2}-\d{2})/(?P<enddate>\d{4}-\d{2}-\d{2})/', views.get_weekly_history),
+    url(r'^getweeklystaff/(?P<startdate>\d{4}-\d{2}-\d{2})/(?P<enddate>\d{4}-\d{2}-\d{2})/', views.get_weekly_staff),
     url(r'^createhistory/', views.create_history),
     url(r'^staff/(?P<staff_id>\d+)/$', views.staff, name='staff'),
 ]

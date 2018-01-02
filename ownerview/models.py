@@ -37,6 +37,15 @@ class Event(models.Model):
         db_table = 'EVENT'
 
 
+class Location(models.Model):
+    lid = models.AutoField(primary_key=True)
+    lname = models.CharField(max_length=30)
+
+    class Meta:
+        managed = False
+        db_table = 'LOCATION'
+
+
 class History(models.Model):
     hid = models.AutoField(primary_key=True)
     hdate = models.DateField()
@@ -45,19 +54,11 @@ class History(models.Model):
     hendtime = models.TimeField(blank=True, null=True)
     hnote = models.CharField(max_length=10, blank=True, null=True)
     staff = models.ForeignKey(Staff, db_column='sid', on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, db_column='lid', on_delete=models.CASCADE)
 
     class Meta:
         managed = False
         db_table = 'HISTORY'
-
-
-class Location(models.Model):
-    lid = models.AutoField(primary_key=True)
-    lname = models.CharField(max_length=30)
-
-    class Meta:
-        managed = False
-        db_table = 'LOCATION'
 
 
 class Roster(models.Model):
