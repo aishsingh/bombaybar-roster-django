@@ -45,29 +45,37 @@ class Location(models.Model):
         managed = False
         db_table = 'LOCATION'
 
+class RosterData(models.Model):
+    starttime = models.TimeField(blank=True, null=True)
+    endtime = models.TimeField(blank=True, null=True)
+    staff = models.ForeignKey(Staff, db_column='sid', on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, db_column='lid', on_delete=models.CASCADE)
 
-class History(models.Model):
+    class Meta:
+        abstract = True
+
+class History(RosterData):
     hid = models.AutoField(primary_key=True)
     hdate = models.DateField()
     htype = models.IntegerField()
-    hstarttime = models.TimeField(blank=True, null=True)
-    hendtime = models.TimeField(blank=True, null=True)
+    starttime = models.TimeField(blank=True, null=True, db_column='hstarttime')
+    endtime = models.TimeField(blank=True, null=True, db_column='hendtime')
     hnote = models.CharField(max_length=10, blank=True, null=True)
-    staff = models.ForeignKey(Staff, db_column='sid', on_delete=models.CASCADE)
-    location = models.ForeignKey(Location, db_column='lid', on_delete=models.CASCADE)
+    # staff = models.ForeignKey(Staff, db_column='sid', on_delete=models.CASCADE)
+    # location = models.ForeignKey(Location, db_column='lid', on_delete=models.CASCADE)
 
     class Meta:
         managed = False
         db_table = 'HISTORY'
 
 
-class Roster(models.Model):
+class Roster(RosterData):
     rid = models.AutoField(primary_key=True)
     rday = models.IntegerField()
-    rstarttime = models.TimeField()
-    rendtime = models.TimeField()
-    staff = models.ForeignKey(Staff, db_column='sid', on_delete=models.CASCADE)
-    location = models.ForeignKey(Location, db_column='lid', on_delete=models.CASCADE)
+    starttime = models.TimeField(blank=True, null=True, db_column='rstarttime')
+    endtime = models.TimeField(blank=True, null=True, db_column='rendtime')
+    # staff = models.ForeignKey(Staff, db_column='sid', on_delete=models.CASCADE)
+    # location = models.ForeignKey(Location, db_column='lid', on_delete=models.CASCADE)
 
     def __unicode__(self):
         return "%s from %s to %s" % (self.rday, self.rstarttime, self.rendtime)

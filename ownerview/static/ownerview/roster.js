@@ -175,7 +175,7 @@ function displayRoster(roster_data) {
         var rowid = $("#roster-table td[data-sid='" + data.fields.staff +"']").parent().index()+2;
         var cell = $("#roster-table tr:eq(" + rowid + ") td:eq(" + data.fields.rday + ")");
 
-        cell.html("<span>" + data.fields.rstarttime + "</span> - <span>" + data.fields.rendtime + "</span>");
+        cell.html("<span>" + data.fields.starttime + "</span> - <span>" + data.fields.endtime + "</span>");
         cell.data("pk", data.pk);
     });
 }
@@ -185,10 +185,10 @@ function displayHistory(history_data) {
         var hday = moment(data.fields.hdate).isoWeekday();
         var cell = $("#roster-table tr:eq(" + rowid + ") td:eq(" + hday + ")");
         if (data.fields.htype == 1) {
-            var new_start = data.fields.hstarttime;
-            var new_end = data.fields.hendtime;
+            var new_start = data.fields.starttime;
+            var new_end = data.fields.endtime;
             if (new_start && new_end) {
-                cell.html("<span>" + data.fields.hstarttime + "</span> - <span>" + data.fields.hendtime + "</span>");
+                cell.html("<span>" + data.fields.starttime + "</span> - <span>" + data.fields.endtime + "</span>");
 
                 var times = cell.find('span');
                 times.eq(0).addClass('history-time');
@@ -196,14 +196,14 @@ function displayHistory(history_data) {
             }
             else if (new_start) {
                 var times = cell.find('span');
-                cell.html("<span>" + data.fields.hstarttime + "</span> - <span>" + times.eq(1).html() + "</span>");
+                cell.html("<span>" + data.fields.starttime + "</span> - <span>" + times.eq(1).html() + "</span>");
 
                 times = cell.find('span');
                 times.eq(0).addClass('history-time');
             }
             else {
                 var times = cell.find('span');
-                cell.html("<span>" + times.eq(0).html() + "</span> - <span>" + data.fields.hendtime + "</span>");
+                cell.html("<span>" + times.eq(0).html() + "</span> - <span>" + data.fields.endtime + "</span>");
 
                 times = cell.find('span');
                 times.eq(1).addClass('history-time');
