@@ -111,7 +111,6 @@
 
     <input type="hidden" id="week-picker"/>
 
-    {% if staff_list %}
     <table class="noselect" id="roster-table">
         <thead>
         <tr id="week-dates">
@@ -135,7 +134,7 @@
 
         </tr>
         <tr id="week-days">
-            <th><span class="badge badge-pill badge-info">Emporium Melbourne</span></th>
+            <th></th>
             <th>Monday</th>
             <th>Tuesday</th>
             <th>Wednesday</th>
@@ -145,33 +144,53 @@
             <th>Sunday</th>
             <th>Hours</th>                    
         </tr>
+        <tr id="loc-head">
+            <th><span class="badge badge-pill badge-info">Emporium Melbourne</span></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>                    
+        </tr>
         </thead>
 
         <tbody>
-        {% for staff in staff_list %}
-        <tr>
-          {% if staff.sposition == 1 %}
-              <td class="staff-cell" data-sid="{{ staff.sid }}"><a href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td>
-          {% else %}
-              <td class="staff-cell" data-sid="{{ staff.sid }}"><a href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td>
-          {% endif %}
+        {# {% for staff in staff_list %} #}
+        {# <tr> #}
+        {#   {% if staff.sposition == 1 %} #}
+        {#       <td class="staff-cell" data-sid="{{ staff.sid }}"><a href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong> <span class="badge badge-warning">Trial</span></a></td> #}
+        {#   {% else %} #}
+        {#       <td class="staff-cell" data-sid="{{ staff.sid }}"><a href="/staff/{{ staff.sid }}/"><strong>{{ staff.sname }}</strong></a></td> #}
+        {#   {% endif %} #}
+        {#  #}
+        {#   <td class="roster-cell">&nbsp;</td> #}
+        {#   <td class="roster-cell">&nbsp;</td> #}
+        {#   <td class="roster-cell">&nbsp;</td> #}
+        {#   <td class="roster-cell">&nbsp;</td> #}
+        {#   <td class="roster-cell">&nbsp;</td> #}
+        {#   <td class="roster-cell">&nbsp;</td> #}
+        {#   <td class="roster-cell">&nbsp;</td> #}
+        {#   <td class="hours-cell"></td> #}
+        {# </tr> #}
+        {# {% endfor %} #}
 
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="roster-cell">&nbsp;</td>
-          <td class="hours-cell"></td>
-        </tr>
-        {% endfor %}
         </tbody>
+        <tr id="loc-head">
+            <th><span class="badge badge-pill badge-info">Westfield Doncaster</span></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>                    
+        </tr>
 
       </table>
 
-    {% else %}
-        <p>No staff are available.</p>
-    {% endif %}
   </body>
 </html>

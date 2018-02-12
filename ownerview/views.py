@@ -32,9 +32,7 @@ class LazyEncoder(DjangoJSONEncoder):
 
 @login_required
 def index(request):
-    staff_list = Staff.objects.order_by('sname')
-    context = {'staff_list': staff_list}
-    return render(request, 'ownerview/index.html', context)
+    return render(request, 'ownerview/index.html')
 
 @login_required
 def get_weekly_staff(request, startdate, enddate):
@@ -45,7 +43,7 @@ def get_weekly_staff(request, startdate, enddate):
     remaining_staff = Staff.objects.exclude(sid__in=staff_history).values('sid')
     staff_roster = Roster.objects.filter(staff__in=remaining_staff).values('staff').distinct()  # Staff that have no changes from their regular roster
 
-    relevent_staff = list(chain(staff_history.values('staff', 'location'), staff_roster.values('staff', 'location')))  # Combine both queries
+    relevent_staff = list(chain(staff_history.values('staff', 'staff__sname', 'location'), staff_roster.values('staff', 'staff__sname', 'location')))  # Combine both queries
     serialized = json.dumps(relevent_staff)
 
     return HttpResponse(serialized, content_type="application/javascript")

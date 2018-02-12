@@ -170,6 +170,24 @@ function reloadRosterTable(roster_data) {
     fetchHistory(roster_data);
 }
 
+function displayStaff(staff_data) {
+    $.each(staff_data, function(i, data) {
+        var markup =
+        "<tr>" +
+          "<td class='staff-cell' data-sid='" + data.staff + "' data-loc='" + data.location + "'><a href='/staff/" + data.staff + "/'><strong>" + data.staff__sname + "</strong></a></td>" +
+          "<td class='roster-cell'>&nbsp;</td>" +
+          "<td class='roster-cell'>&nbsp;</td>" +
+          "<td class='roster-cell'>&nbsp;</td>" +
+          "<td class='roster-cell'>&nbsp;</td>" +
+          "<td class='roster-cell'>&nbsp;</td>" +
+          "<td class='roster-cell'>&nbsp;</td>" +
+          "<td class='roster-cell'>&nbsp;</td>" +
+          "<td class='hours-cell'></td>" +
+        "</tr>";
+
+        $("#roster-table tbody").append(markup);
+    });
+}
 function displayRoster(roster_data) {
     $.each(roster_data, function(i, data) {
         var rowid = $("#roster-table td[data-sid='" + data.fields.staff +"']").parent().index()+2;
@@ -268,17 +286,30 @@ $(document).ready(function()
     var roster_data = null;
     moment.locale('en');
 
-    // Fetch Weekly Roster
+
+    // Fetch Staff + Location data
     $.ajax({
-            url: '/getroster',
+            url: '/getweeklystaff/' + moment().startOf('isoWeek').format('YYYY-MM-DD') + '/' + moment().endOf('isoWeek').format('YYYY-MM-DD'),
             type: 'GET',
             success: function(data) {
-                roster_data = JSON.parse(data);
-                roster_data_received = true;
-                reloadRosterTable(roster_data);
+                displayStaff(JSON.parse(data));
+
+                // Fetch all Roster data
+                $.ajax({
+                        url: '/getroster',
+                        type: 'GET',
+                        success: function(data) {
+                            roster_data = JSON.parse(data);
+                            roster_data_received = true;
+                            reloadRosterTable(roster_data);
+                        },
+                        failure: function(data) { 
+                            alert('Error fetching roster data');
+                        }
+                }); 
             },
             failure: function(data) { 
-                alert('Error fetching roster data');
+                alert('Error fetching history data');
             }
     }); 
 
