@@ -13,7 +13,7 @@ from django.core.exceptions import ValidationError
 from itertools import chain
 import json
 
-from .models import Staff, Roster, History
+from .models import Staff, Roster, History, Location
 
 
 class LazyEncoder(DjangoJSONEncoder):
@@ -32,7 +32,9 @@ class LazyEncoder(DjangoJSONEncoder):
 
 @login_required
 def index(request):
-    return render(request, 'ownerview/index.html')
+    staff_list = Staff.objects.order_by('sname')
+    context = { 'staff_list': staff_list }
+    return render(request, 'ownerview/index.html', context)
 
 @login_required
 def get_weekly_staff(request, startdate, enddate):
@@ -82,9 +84,8 @@ def create_history(request):
 
 @login_required
 def roster(request):
-    staff_list = Staff.objects.order_by('sname')
-
-    context = { 'staff_list': staff_list }
+    loc_list = json.dumps(list(Location.objects.values_list('lname')))
+    context = { 'loc_list': loc_list }
     return render(request, 'ownerview/roster.html', context)
 
 @login_required

@@ -178,7 +178,7 @@ function displayStaff(staff_data) {
         if (!$("#roster-table tbody #loc-head[data-loc='" + data.location + "']").length) {
             var markup =
             "<tr id='loc-head' data-loc='" + data.location + "'>" +
-                "<th><span class='badge badge-pill badge-info'>" + data.location + "</span></th>" +
+                "<th><span class='badge badge-pill badge-info'>" + LOC_NAMES[data.location] + "</span></th>" +
                 "<th></th>" + 
                 "<th></th>" +
                 "<th></th>" +
