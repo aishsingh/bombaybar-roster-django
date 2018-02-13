@@ -172,6 +172,26 @@ function reloadRosterTable(roster_data) {
 
 function displayStaff(staff_data) {
     $.each(staff_data, function(i, data) {
+        // If new locatio
+        // alert($("#loc-head[data-loc='1']").html());
+        // if (!$("#loc-head").attr("data-loc='" + data.location + "'")) {
+        if (!$("#roster-table tbody #loc-head[data-loc='" + data.location + "']").length) {
+            var markup =
+            "<tr id='loc-head' data-loc='" + data.location + "'>" +
+                "<th><span class='badge badge-pill badge-info'>" + data.location + "</span></th>" +
+                "<th></th>" + 
+                "<th></th>" +
+                "<th></th>" +
+                "<th></th>" +
+                "<th></th>" +
+                "<th></th>" +
+                "<th></th>" +
+                "<th></th>" +                   
+            "</tr>";
+
+            $("#roster-table tbody").append(markup);
+        }
+
         var markup =
         "<tr>" +
           "<td class='staff-cell' data-sid='" + data.staff + "' data-loc='" + data.location + "'><a href='/staff/" + data.staff + "/'><strong>" + data.staff__sname + "</strong></a></td>" +
@@ -185,7 +205,8 @@ function displayStaff(staff_data) {
           "<td class='hours-cell'></td>" +
         "</tr>";
 
-        $("#roster-table tbody").append(markup);
+        // $("#roster-table tbody").append(markup);
+        $("#roster-table tbody #loc-head[data-loc='" + data.location + "']").after(markup);
     });
 }
 function displayRoster(roster_data) {
