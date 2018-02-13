@@ -7,10 +7,10 @@ body {
     min-width: 900px;
     margin-top: 60px;
     background: transparent;
-    background-size: 100px 100px;
+    background-size: 70px 70px;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-position: center 58%;
+    background-position: center 40%;
     background-color: rgba(255, 255, 255, 0.05);
 }
 #roster-table td:not(:first-child):not(:last-child) {
@@ -38,7 +38,7 @@ body {
     padding: 4px 2px 2px 4px;
     text-align: center;
 }
-#week-dates th, #week-days th {
+#week-dates th, #week-days th, #loc-head th {
     background: rgb(52, 58, 64);
     border-color: rgb(52, 58, 64);
     color: white;

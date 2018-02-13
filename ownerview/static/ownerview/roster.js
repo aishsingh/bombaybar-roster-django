@@ -75,7 +75,6 @@ function calcWeekDates() {
 function styleRoster() {
     // Highlight current day column
     if (!week_offset) {
-        // var elements = $("#roster-table td, #roster-table th");
         var elements = $("#roster-table th");
         var target_index = elements.index() + 1 + day_of_week;
 
@@ -83,13 +82,13 @@ function styleRoster() {
         elements.filter(":nth-child(" + target_index + ")").css("color", "black");
         // elements.filter(":nth-child(" + target_index + ")").css("border", "none");
 
-        // Hightlight the future
+        // Highlight the future
         elements = $("#roster-table td");
         for (var i = target_index+1; i < (elements.index()+2+7); i++) {
             elements.filter(":nth-child(" + i + ")").css("background-color", "rgba(255, 255, 255, 0.5)");
             // elements.filter(":nth-child(" + i + ")").css("color", "rgb(200, 200, 200)");
         }
-    } // Hightlight the future
+    } // Highlight the future
     else if (week_offset > 0) {
         $("#roster-table .roster-cell").css("background-color", "rgba(255, 255, 255, 0.5)");
         // $("#roster-table .roster-cell").css("color", "rgb(200, 200, 200)");
@@ -205,7 +204,6 @@ function displayStaff(staff_data) {
           "<td class='hours-cell'></td>" +
         "</tr>";
 
-        // $("#roster-table tbody").append(markup);
         $("#roster-table tbody #loc-head[data-loc='" + data.location + "']").after(markup);
     });
 }
@@ -314,6 +312,7 @@ $(document).ready(function()
             type: 'GET',
             success: function(data) {
                 displayStaff(JSON.parse(data));
+                calcWeekDates();    
 
                 // Fetch all Roster data
                 $.ajax({
@@ -334,42 +333,32 @@ $(document).ready(function()
             }
     }); 
 
-    calcWeekDates();    
 
-    // Highlight only when mouseover first row
-    $("#roster-table td:first-child").mouseover(function()
-    {
-        var target_index, elements;
-        target_index = $(this).closest("tr").index() + 1;
-        elements = $("tr");
-        // elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(220, 53, 69, 1)");
-        elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(23, 162, 184, 0.6)");
+    // Highlight only when mouse enters first row
+    $("#roster-table").on('mouseenter', 'td:first-child', function() {
+        var row = $(this).closest("tr")
+        row.filter(":nth-child(" + (row.index()+1) + ")").css("background-color", "rgba(23, 162, 184, 0.6)");
 
-        if (!week_offset && !edit_mode) {
-            var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
+        if (!week_offset && !edit_mode) {  // Hightlight day
+            var cell = row.find("td:eq(" + day_of_week + ")");
             // cell.css("background-color", "rgba(23, 162, 184, 1)");
             // cell.css("color", "white");
         }
     });
-    // Highlight mouseover row
-    $("#roster-table td:not(:first-child)").mouseover(function()
-    {
-        var target_index, elements;
-        target_index = $(this).closest("tr").index() + 1;
-        elements = $("tr");
-        // elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(220, 53, 69, 1)");
-        elements.filter(":nth-child(" + target_index + ")").css("background-color", "rgba(255, 255, 255, 0.3)");
+    // // Highlight mouse enters row
+    $("#roster-table").on('mouseenter', 'td:not(:first-child)', function() {
+        var row = $(this).closest("tr")
+        row.filter(":nth-child(" + (row.index()+1) + ")").css("background-color", "rgba(255, 255, 255, 0.3)");
 
-        if (!week_offset && !edit_mode) {
-            var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
+        if (!week_offset && !edit_mode) {  // Highlight day
+            var cell = row.find("td:eq(" + day_of_week + ")");
             // cell.css("background-color", "rgba(255, 255, 255, 0.7)");
             // cell.css("color", "black");
         }
     });
     // Reset styles
-    $("#roster-table tr").mouseleave(function()
-    {
-        $("tr").css("background-color", "transparent");
+    $("#roster-table").on('mouseleave', 'tr', function() {
+        $("tr").css("background-color", "");
 
         if (!week_offset && !edit_mode) {
             var cell = $(this).closest("tr").find("td:eq(" + day_of_week + ")");
