@@ -541,14 +541,20 @@ $(document).ready(function()
             disableButtonsForEditing();
         }
         else {  // Cancel
-            // Remove selected inputs
+            // Reset selected cell changes
             if (cell_selected != null) {
                 if (cell_selected.attr('data-starttime') && cell_selected.attr('data-endtime'))
                     cell_selected.html("<span>" + cell_selected.attr('data-starttime') + "</span> - <span>" + cell_selected.attr('data-endtime') + "</span>");
                 else
                     cell_selected.html("&nbsp;");
 
-                $("[data-starttime][data-endtime]").each(function() {
+                // Reset all other changes
+                $("[data-starttime][data-endtime]").each(function() { 
+                    if ($(this).attr('data-starttime').length == 0 || $(this).attr('data-endtime').length == 0)
+                        $(this).html("&nbsp;");
+                    else
+                        $(this).html("<span>" + $(this).attr('data-starttime') + "</span> - <span>" + $(this).attr('data-endtime') + "</span>");
+
                     $(this).removeAttr('data-starttime').removeAttr('data-endtime');
                     $(this).removeAttr('data-edited-start').removeAttr('data-edited-end');
                 });
@@ -585,10 +591,15 @@ $(document).ready(function()
                     var start = times.first().val().replace(/\s/g, '');
                     var end = times.last().val().replace(/\s/g, '');
 
-                    if (start && end)
+                    // Validate time input
+                    if (moment(start,"HH:mm", true).isValid() && moment(end,"HH:mm", true).isValid())
                         cell_selected.html("<span>" + start + "</span> - <span>" + end + "</span>");
-                    else
+                    else {
                         cell_selected.html("&nbsp;");
+
+                        cell_selected.css("background-color", "rgba(100, 100, 100, 0.1)");
+                        cell_selected.removeAttr("data-edited-start");
+                    }
                 }
             }
             else {
